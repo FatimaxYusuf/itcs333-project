@@ -13,8 +13,7 @@
       --primary: #A9B5DF;
       --accent: #7886C7;
       --text-dark: #2D336B;
-      --nav-bg: #7886C7;
-      --nav-hover: #A9B5DF;
+      --white: #fff;
     }
 
     * {
@@ -27,196 +26,149 @@
     body {
       background-color: var(--bg-light);
       color: var(--text-dark);
-      min-height: 100vh;
     }
 
-    .menue {
-      position: fixed;
-      height: 100vh;
-      width: 250px;
-      z-index: 1000;
-      left: -250px;
-      transition: all 0.3s ease;
-    }
-
-    #btn:checked ~ .menue {
-      left: 0;
-    }
-
-    input[type="checkbox"] {
-      display: none;
-    }
-
-    .menu-btn {
-      position: fixed;
-      top: 10px;
-      left: 20px;
-      height: 45px;
-      width: 45px;
-      z-index: 999;
-      color: white;
-      background: var(--nav-bg);
-      border: 1px solid #333;
-      text-align: center;
-      line-height: 45px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 23px;
-      transition: all 0.3s ease;
-    }
-
-    #btn:checked ~ .menu-btn {
-      left: 270px;
-    }
-
-    #btn:checked ~ .menu-btn i:before {
-      content: "\f00d";
-    }
-
-    #sidebar {
+    .event-card {
+      background-color: var(--white);
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      padding: 1.5rem;
+      transition: transform 0.2s ease-in-out;
       height: 100%;
-      width: 100%;
-      background: var(--nav-bg);
-      overflow: hidden;
     }
 
-    #sidebar .title {
-      color: white;
-      font-size: 24px;
-      font-weight: 700;
-      line-height: 65px;
-      text-align: center;
-      background-color: var(--accent);
+    .event-card:hover {
+      transform: translateY(-5px);
     }
 
-    #sidebar .list {
-      list-style: none;
-      padding: 0;
+    .event-date {
+      color: var(--accent);
+      font-weight: 500;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
     }
 
-    #sidebar .list li {
-      line-height: 50px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      padding-left: 30px;
-      transition: all 0.3s ease;
-    }
-
-    #sidebar .list li:hover {
-      background-color: var(--nav-hover);
-      box-shadow: inset 4px 0 0 var(--primary);
-    }
-
-    #sidebar .list li a {
-      color: white;
-      text-decoration: none;
-      font-size: 18px;
-      display: block;
-    }
-
-    #sidebar .list li a i {
-      margin-right: 15px;
-    }
-
-    h1, h2 {
+    .event-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
       color: var(--text-dark);
     }
 
-    .badge {
-      font-size: 0.9rem;
+    .event-description {
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    @media (max-width: 576px) {
+      .event-title {
+        font-size: 1.05rem;
+      }
+
+      .event-description {
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Sidebar -->
-  <input type="checkbox" id="btn" />
-  <label for="btn" class="menu-btn">
-    <i class="fas fa-bars"></i>
-  </label>
+  <div class="container py-5">
+    <!-- Page Title and Buttons -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+      <h1 class="fw-bold mb-0">📅 Events Calendar</h1>
+      <div class="d-flex flex-column flex-sm-row gap-2">
+        <a href="#" class="btn btn-outline-secondary">
+          <i class="fa fa-clock-rotate-left me-2"></i>Previous Events
+        </a>
+        <a href="#" class="btn btn-primary">
+          <i class="fa fa-plus me-2"></i>Add Event
+        </a>
+      </div>
+    </div>
 
-  <div class="menue">
-    <nav id="sidebar">
-      <div class="title">Campus Hub</div>
-      <ul class="list">
-        <li><a href="#"><i class="fa-solid fa-calendar-days"></i> Events Calendar</a></li>
-        <li><a href="#"><i class="fa-solid fa-user-group"></i> Study Group Finder</a></li>
-        <li><a href="#"><i class="fa-solid fa-file-pen"></i> Course Reviews</a></li>
-        <li><a href="#"><i class="fa-solid fa-book"></i> Course Notes</a></li>
-        <li><a href="#"><i class="fa-solid fa-newspaper"></i> Campus News</a></li>
-      </ul>
-    </nav>
+    <!-- Search Bar -->
+    <div class="input-group mb-5">
+      <input type="text" class="form-control" placeholder="Search for upcoming events..." />
+      <button class="btn btn-outline-secondary">Search</button>
+    </div>
+
+    <!-- TODAY -->
+    <section class="mb-5">
+      <h2 class="h5 mb-3">📍 Today</h2>
+      <div class="row row-cols-1 g-4">
+
+        <div class="col">
+          <div class="event-card">
+            <div class="event-date">April 12, 2025</div>
+            <div class="event-title">Orientation Day</div>
+            <div class="event-description">
+              Meet new students and explore the campus with fun activities and snacks. 10AM in Main Hall.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEXT WEEK -->
+    <section class="mb-5">
+      <h2 class="h5 mb-3">🗓️ Next Week</h2><div class="row row-cols-1 g-4">
+        <div class="row row-cols-1 g-4">
+
+        <div class="col">
+          <div class="event-card">
+            <div class="event-date">April 18, 2025</div>
+            <div class="event-title">Study Skills Workshop</div>
+            <div class="event-description">
+              Learn note-taking and time management techniques in this interactive session at Room B104.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- THIS MONTH -->
+    <section>
+      <h2 class="h5 mb-3">📆 This Month</h2>
+      <div class="row row-cols-1 g-4">
+
+        <div class="col">
+          <div class="event-card">
+            <div class="event-date">April 28, 2025</div>
+            <div class="event-title">Spring Club Fair</div>
+            <div class="event-description">
+              Explore clubs and student organizations — booths, merch, and signup sheets available!
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- THIS YEAR -->
+    <section class="mt-5">
+     <h2 class="h5 mb-3">📖 This Year</h2>
+     <div class="row row-cols-1 g-4">
+      <div class="col">
+        <div class="event-card">
+          <div class="event-date">October 10, 2025</div>
+          <div class="event-title">Tech Career Fair</div>
+          <div class="event-description">
+            Connect with leading tech companies, drop your resume, and explore internship opportunities. Main Arena, 12 PM.
+          </div>
+        </div>
+      </div>
+  
+      <div class="col">
+        <div class="event-card">
+          <div class="event-date">December 15, 2025</div>
+          <div class="event-title">Winter Gala</div>
+          <div class="event-description">
+            Celebrate the end of the year with a festive evening of music, food, and awards. Dress to impress!
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
   </div>
-    <!-- Main Content -->
-    <main class="container mt-5" style="margin-left: 270px;">
-      <!-- Header + Buttons -->
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3">📅 Events Calendar</h1>
-        <div>
-          <a href="add-event.html" class="btn btn-primary me-2">
-            <i class="fa fa-plus"></i> Add New Event
-          </a>
-          <a href="#" class="btn btn-outline-secondary">
-            <i class="fa fa-clock-rotate-left"></i> Previous Events
-          </a>
-        </div>
-      </div>
-  
-      <!-- Search Bar -->
-      <div class="input-group mb-5">
-        <input type="text" class="form-control" placeholder="Search for events..." />
-        <button class="btn btn-outline-secondary">Search</button>
-      </div>
-  
-      <!-- Today -->
-      <section class="mb-5">
-        <h2 class="h4 mb-3">📍 Today</h2>
-        <div class="row g-4">
-          <div class="col-md-6">
-            <div class="card shadow-sm">
-              <div class="card-body">
-                <h5 class="card-title">Orientation Day</h5>
-                <p class="card-text">Join us at 10 AM in the Main Hall for student orientation and a campus tour!</p>
-                <span class="badge bg-primary">April 11</span>
-              </div>
-            </div>
-          </div>
-          <!-- Add more "Today" events here -->
-        </div>
-      </section>
-  
-      <!-- Next Week -->
-      <section class="mb-5">
-        <h2 class="h4 mb-3">🗓️ Next Week</h2>
-        <div class="row g-4">
-          <div class="col-md-6">
-            <div class="card shadow-sm">
-              <div class="card-body">
-                <h5 class="card-title">Study Skills Workshop</h5>
-                <p class="card-text">Tips and techniques for time management and study focus.</p>
-                <span class="badge bg-secondary">April 17</span>
-              </div>
-            </div>
-          </div>
-          <!-- Add more "Next Week" events here -->
-        </div>
-      </section>
-  
-      <!-- This Month -->
-      <section class="mb-5">
-        <h2 class="h4 mb-3">📆 This Month</h2>
-        <div class="row g-4">
-          <div class="col-md-6 col-lg-4">
-            <div class="card shadow-sm">
-              <div class="card-body">
-                <h5 class="card-title">Spring Club Fair</h5>
-                <p class="card-text">Meet all the campus clubs and sign up for your favorite activities!</p>
-                <span class="badge bg-success">April 25</span>
-              </div>
-            </div>
-          </div>
-          <!-- Add more "This Month" events here -->
-        </div>
-      </section>
-    </main>
-  </body>
-  </html>
-  
+</body>
+</html>
