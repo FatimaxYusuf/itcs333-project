@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Events Calendar</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+  <style>
+    :root {
+      --bg-light: #FFF2F2;
+      --primary: #A9B5DF;
+      --accent: #7886C7;
+      --text-dark: #2D336B;
+      --nav-bg: #7886C7;
+      --nav-hover: #A9B5DF;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      min-height: 100vh;
+    }
+
+    .menue {
+      position: fixed;
+      height: 100vh;
+      width: 250px;
+      z-index: 1000;
+      left: -250px;
+      transition: all 0.3s ease;
+    }
+
+    #btn:checked ~ .menue {
+      left: 0;
+    }
+
+    input[type="checkbox"] {
+      display: none;
+    }
+
+    .menu-btn {
+      position: fixed;
+      top: 10px;
+      left: 20px;
+      height: 45px;
+      width: 45px;
+      z-index: 999;
+      color: white;
+      background: var(--nav-bg);
+      border: 1px solid #333;
+      text-align: center;
+      line-height: 45px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 23px;
+      transition: all 0.3s ease;
+    }
+
+    #btn:checked ~ .menu-btn {
+      left: 270px;
+    }
+
+    #btn:checked ~ .menu-btn i:before {
+      content: "\f00d";
+    }
+
+    #sidebar {
+      height: 100%;
+      width: 100%;
+      background: var(--nav-bg);
+      overflow: hidden;
+    }
+
+    #sidebar .title {
+      color: white;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 65px;
+      text-align: center;
+      background-color: var(--accent);
+    }
+
+    #sidebar .list {
+      list-style: none;
+      padding: 0;
+    }
+
+    #sidebar .list li {
+      line-height: 50px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-left: 30px;
+      transition: all 0.3s ease;
+    }
+
+    #sidebar .list li:hover {
+      background-color: var(--nav-hover);
+      box-shadow: inset 4px 0 0 var(--primary);
+    }
+
+    #sidebar .list li a {
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+      display: block;
+    }
+
+    #sidebar .list li a i {
+      margin-right: 15px;
+    }
+
+    h1, h2 {
+      color: var(--text-dark);
+    }
+
+    .badge {
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <input type="checkbox" id="btn" />
+  <label for="btn" class="menu-btn">
+    <i class="fas fa-bars"></i>
+  </label>
+
+  <div class="menue">
+    <nav id="sidebar">
+      <div class="title">Campus Hub</div>
+      <ul class="list">
+        <li><a href="#"><i class="fa-solid fa-calendar-days"></i> Events Calendar</a></li>
+        <li><a href="#"><i class="fa-solid fa-user-group"></i> Study Group Finder</a></li>
+        <li><a href="#"><i class="fa-solid fa-file-pen"></i> Course Reviews</a></li>
+        <li><a href="#"><i class="fa-solid fa-book"></i> Course Notes</a></li>
+        <li><a href="#"><i class="fa-solid fa-newspaper"></i> Campus News</a></li>
+      </ul>
+    </nav>
+  </div>
+    <!-- Main Content -->
+    <main class="container mt-5" style="margin-left: 270px;">
+      <!-- Header + Buttons -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">📅 Events Calendar</h1>
+        <div>
+          <a href="add-event.html" class="btn btn-primary me-2">
+            <i class="fa fa-plus"></i> Add New Event
+          </a>
+          <a href="#" class="btn btn-outline-secondary">
+            <i class="fa fa-clock-rotate-left"></i> Previous Events
+          </a>
+        </div>
+      </div>
+  
+      <!-- Search Bar -->
+      <div class="input-group mb-5">
+        <input type="text" class="form-control" placeholder="Search for events..." />
+        <button class="btn btn-outline-secondary">Search</button>
+      </div>
+  
+      <!-- Today -->
+      <section class="mb-5">
+        <h2 class="h4 mb-3">📍 Today</h2>
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="card shadow-sm">
+              <div class="card-body">
+                <h5 class="card-title">Orientation Day</h5>
+                <p class="card-text">Join us at 10 AM in the Main Hall for student orientation and a campus tour!</p>
+                <span class="badge bg-primary">April 11</span>
+              </div>
+            </div>
+          </div>
+          <!-- Add more "Today" events here -->
+        </div>
+      </section>
+  
+      <!-- Next Week -->
+      <section class="mb-5">
+        <h2 class="h4 mb-3">🗓️ Next Week</h2>
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="card shadow-sm">
+              <div class="card-body">
+                <h5 class="card-title">Study Skills Workshop</h5>
+                <p class="card-text">Tips and techniques for time management and study focus.</p>
+                <span class="badge bg-secondary">April 17</span>
+              </div>
+            </div>
+          </div>
+          <!-- Add more "Next Week" events here -->
+        </div>
+      </section>
+  
+      <!-- This Month -->
+      <section class="mb-5">
+        <h2 class="h4 mb-3">📆 This Month</h2>
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm">
+              <div class="card-body">
+                <h5 class="card-title">Spring Club Fair</h5>
+                <p class="card-text">Meet all the campus clubs and sign up for your favorite activities!</p>
+                <span class="badge bg-success">April 25</span>
+              </div>
+            </div>
+          </div>
+          <!-- Add more "This Month" events here -->
+        </div>
+      </section>
+    </main>
+  </body>
+  </html>
+  
