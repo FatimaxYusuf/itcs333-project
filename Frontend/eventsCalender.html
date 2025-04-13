@@ -27,6 +27,130 @@
       background-color: var(--bg-light);
       color: var(--text-dark);
     }
+    .menue {
+      position: fixed;
+      height: 100vh;
+      width: 250px;
+      z-index: 1000;
+      left: -250px;
+      transition: all 0.3s ease;
+      background-color:#7886C7 ;
+    }
+
+    #btn:checked ~ .menue {
+      left: 0;
+    }
+
+    input[type="checkbox"] {
+      display: none;
+    }
+
+    .menu-btn {
+      position: fixed;
+      top: 10px;
+      left: 20px;
+      height: 45px;
+      width: 45px;
+      z-index: 999;
+      color: white;
+      background: #7886C7;
+      border: 1px solid #333;
+      text-align: center;
+      line-height: 45px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 23px;
+      transition: all 0.3s ease;
+    }
+
+    #btn:checked ~ .menu-btn {
+      left: 270px;
+    }
+
+    #btn:checked ~ .menu-btn i:before {
+      content: "\f00d";
+    }
+
+    #sidebar {
+      height: 100%;
+      width: 100%;
+      background: var(--nav-bg);
+      overflow: hidden;
+    }
+
+    #sidebar .title {
+      color: white;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 65px;
+      text-align: center;
+      background-color: var(--accent);
+    }
+
+    #sidebar .list {
+      list-style: none;
+      padding: 0;
+    }
+
+    #sidebar .list li {
+      line-height: 50px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-left: 30px;
+      transition: all 0.3s ease;
+    }
+
+    #sidebar .list li:hover {
+      background-color: var(--nav-hover);
+      box-shadow: inset 4px 0 0 var(--primary);
+    }
+
+    #sidebar .list li a {
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+      display: block;
+    }
+
+    #sidebar .list li a i {
+      margin-right: 15px;
+    }
+
+.welcome{
+
+background-color: white;
+            padding: 40px 60px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(45, 51, 107, 0.1);
+            max-width: 600px;
+
+}
+
+
+
+
+h1 {
+            color: #2D336B;
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            color: #7886C7;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .highlight {
+            color: #2D336B;
+            font-weight: bold;
+        }
+        
+        .welcome-icon {
+            font-size: 4rem;
+            color: #A9B5DF;
+            margin-bottom: 20px;
+        }
 
     .event-card {
       background-color: var(--white);
@@ -72,6 +196,23 @@
   </style>
 </head>
 <body>
+  <input type="checkbox" id="btn">
+  <label for="btn" class="menu-btn">
+    <i class="fas fa-bars"></i>
+  </label>
+  
+  <div class="menue">
+    <nav id="sidebar">
+      <div class="title">Campus Hub</div>
+      <ul class="list">
+        <li><a href="./Frontend/eventsCalender.html"><i class="fa-solid fa-calendar-days"></i> Events calendar</a></li>
+        <li><a href="#"><i class="fa-solid fa-user-group"></i> Study Group Finder</a></li>
+        <li><a href="./Course Review/course-rev.html "><i class="fa-solid fa-file-pen"></i> Course Reviews</a></li>
+        <li><a href="./Course Notes/course-notes9.html"><i class="fa-solid fa-book"></i> Course Notes</a></li>
+        <li><a href="./CampusNews/campusnewsmain.html"><i class="fa-solid fa-newspaper"></i> Campus News</a></li>
+      </ul>
+    </nav>
+  </div>
   <div class="container py-5">
     <!-- Page Title -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
