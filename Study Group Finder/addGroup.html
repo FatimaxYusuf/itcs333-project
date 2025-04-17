@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Create Study Group</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-light: #FFF2F2;
+      --primary: #A9B5DF;
+      --accent: #7886C7;
+      --text-dark: #2D336B;
+      --white: #fff;
+    }
+
+    body {
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      font-family: 'Poppins', sans-serif;
+      padding: 2rem;
+    }
+
+    .form-container {
+      background-color: var(--white);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .form-label {
+      font-weight: 500;
+      color: var(--text-dark);
+    }
+
+    .btn-primary {
+      background-color: var(--accent);
+      border: none;
+      font-weight: 500;
+      transition: 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary);
+    }
+
+    .form-title {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+
+    }
+    .btn-outline-secondary {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btn-outline-secondary:hover {
+  background-color: var(--accent);
+  color: white;
+}
+
+    @media (max-width: 576px) {
+  .form-container {
+    padding: 1.2rem;
+  }
+
+  .form-title {
+    font-size: 1.3rem;
+  }
+
+  .form-label {
+    font-size: 0.95rem;
+  }
+
+  .btn-primary {
+    font-size: 0.95rem;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 768px) {
+  .form-title {
+    font-size: 1.4rem;
+  }
+
+  .form-label {
+    font-size: 1rem;
+  }
+
+  .btn-primary {
+    font-size: 1rem;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <div class="form-title"> Create a New Study Group</div>
+    <form>
+      <div class="mb-3">
+        <label for="groupName" class="form-label">Group Name</label>
+        <input type="text" class="form-control" id="groupName" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="subject" class="form-label">Subject / Category</label>
+        <input type="text" class="form-control" id="subject" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="location" class="form-label">Meeting Location</label>
+        <input type="text" class="form-control" id="location" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="time" class="form-label">Meeting Time</label>
+        <input type="time" class="form-control" id="time" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="capacity" class="form-label">Group Capacity</label>
+        <input type="number" class="form-control" id="capacity" min="1" max="50" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="description" class="form-label">Group Description</label>
+        <textarea class="form-control" id="description" rows="4" placeholder="What is this group about?..." required></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label for="logo" class="form-label">Upload Group Logo (optional)</label>
+        <input type="file" class="form-control" id="logo" accept="image/*">
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100 mt-3">Create Group</button>
+      <div class="text-center mt-4">
+        <a href="studyGroup.html" class="btn btn-outline-secondary">← Back to Study Groups</a>
+      </div>
+      
+    </form>
+  </div>
+
+</body>
+</html>
