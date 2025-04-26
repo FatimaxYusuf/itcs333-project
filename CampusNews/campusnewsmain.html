@@ -177,7 +177,7 @@
 
     .news-list {
       display: flex;
-      flex-direction: column;
+      flex-wrap: wrap;
       gap: 16px;
     }
 
@@ -243,7 +243,15 @@
       cursor: pointer;
     }
 
+    .news-card {
+  display: none;
+ 
+}
 
+.news-card.active {
+  display: flex;
+  
+}
     
 
     @media (max-width: 768px) {
@@ -325,7 +333,7 @@
     </div>
 
     <div class="news-list">
-      <div class="news-card d-flex">
+      <div class="news-card">
         <img src="https://i.pinimg.com/474x/d9/9c/c7/d99cc7fc0166ce34eb37a36cece71a94.jpg" alt="News">
         <div class="news-content">
           <div class="news-title">Engineering Students Unveil Solar-Powered Vehicle Prototype</div>
@@ -338,14 +346,26 @@
         </div>
         
       </div>
-      <div class="news-card d-flex">
-        <img src="https://i.pinimg.com/474x/d9/9c/c7/d99cc7fc0166ce34eb37a36cece71a94.jpg" alt="News">
+      <div class="news-card">
+        <img src="https://i.pinimg.com/474x/25/c2/e4/25c2e412f023ed461138be1c8f1327a3.jpg" alt="News">
         <div class="news-content">
           <div class="news-title">Art Students Showcase Urban Landscape Collage Series</div>
           <div class="news-summary">Graduating fine arts students unveiled a mixed-media collage series inspired by urban 
             landscapes at a campus gallery opening, drawing attention from faculty and the local art scene.</div>
           <div class="news-meta">
             <span>April 28, 2024 • College of Arts</span>
+            <a href="readmore.html">Read More</a>
+          </div>
+        </div>
+      </div>
+      <div class="news-card">
+        <img src="https://i.pinimg.com/474x/a9/7c/37/a97c37dfd882d5c005abc54298d5525e.jpg" alt="News">
+        <div class="news-content">
+          <div class="news-title">Building Cybersecurity Skills at Our IT College</div>
+          <div class="news-summary">As cyber threats increase, our IT college is strengthening cybersecurity education. Students 
+            are learning to protect data and systems through specialized courses, hands-on labs, and expert-led workshops.</div>
+          <div class="news-meta">
+            <span>May 5, 2024 • College of Information Technology</span>
             <a href="readmore.html">Read More</a>
           </div>
         </div>
@@ -361,6 +381,6 @@
       <button class="btn btn-outline-secondary">Next &raquo;</button>
     </div>
   </div>
-  
+  <script src="news-2.js"></script>
 </body>
 </html>
