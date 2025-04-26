@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>course Reviews</title>
+   <meta name="viewport" content="width=, initial-scale=1.0">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+ 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<style>
+  :root {
+--bg-light: #FFF2F2;
+--primary: #A9B5DF;
+--accent: #7886C7;
+--text-dark: #2D336B;
+--nav-bg: #7886C7;
+--nav-hover: #A9B5DF;
+}
+
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: 'Inter', sans-serif;
+}
+
+body {
+background-color: var(--bg-light);
+color: var(--text-dark);
+min-height: 100vh;
+}
+
+
+.menue {
+position: fixed;
+height: 100vh;
+width: 250px;
+z-index: 1000;
+left: -250px;
+transition: all 0.3s ease;
+}
+
+#btn:checked ~ .menue {
+left: 0;
+}
+
+input[type="checkbox"] {
+display: none;
+}
+
+.menu-btn {
+position: fixed;
+top: 10px;
+left: 20px;
+height: 45px;
+width: 45px;
+z-index: 999;
+color: white;
+background: var(--nav-bg);
+border: 1px solid #333;
+text-align: center;
+line-height: 45px;
+border-radius: 5px;
+cursor: pointer;
+font-size: 23px;
+transition: all 0.3s ease;
+}
+
+#btn:checked ~ .menu-btn {
+left: 270px;
+}
+
+#btn:checked ~ .menu-btn i:before {
+content: "\f00d";
+}
+
+#sidebar {
+height: 100%;
+width: 100%;
+background: var(--nav-bg);
+overflow: hidden;
+}
+
+#sidebar .title {
+color: white;
+font-size: 24px;
+font-weight: 700;
+line-height: 65px;
+text-align: center;
+background-color: var(--accent);
+}
+
+#sidebar .list {
+list-style: none;
+padding: 0;
+}
+
+#sidebar .list li {
+line-height: 50px;
+border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+padding-left: 30px;
+transition: all 0.3s ease;
+}
+
+#sidebar .list li:hover {
+background-color: var(--nav-hover);
+box-shadow: inset 4px 0 0 var(--primary);
+}
+
+#sidebar .list li a {
+color: white;
+text-decoration: none;
+font-size: 18px;
+display: block;
+}
+
+#sidebar .list li a i {
+margin-right: 15px;
+}
+
+.table-dark{background-color: var(--text-dark); color: var(--text-dark);}
+.custom-pagination .page-link {
+    background-color: var(--primary);
+    color: var(--text-dark);
+    border: none;
+    margin: 0 5px;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+  }
+
+  .custom-pagination .page-link:hover {
+    background-color: var(--nav-hover);
+    color: white;
+  }
+
+  .custom-pagination .active .page-link {
+    background-color: var(--accent);
+    color: white;
+    font-weight: bold;
+  }
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+    <header>
+      
+      <input type="checkbox" id="btn">
+      <label for="btn" class="menu-btn">
+        <i class="fas fa-bars"></i>
+      </label>
+      
+      <div class="menue">
+        <nav id="sidebar">
+          <div class="title">Campus Hub</div>
+          <ul class="list">
+            <li><a href="#"><i class="fa-solid fa-calendar-days"></i> Events calendar</a></li>
+            <li><a href="#"><i class="fa-solid fa-user-group"></i> Study Group Finder</a></li>
+            <li><a href="#"><i class="fa-solid fa-file-pen"></i> Course Reviews</a></li>
+            <li><a href="#"><i class="fa-solid fa-book"></i> Course Notes</a></li>
+            <li><a href="CampusNews.html"><i class="fa-solid fa-newspaper"></i> Campus News</a></li>
+          </ul>
+        </nav>
+      </div>
+     
+      <div class="container">
+        <h1 class="text-center my-5 fw-bold display-4 text-primary" style="color: var(--accent)!important;">Course Reviews</h1>
+      </div>
+        
+        
+    </header>
+    <body>
+     <section>
+       
+  <!--search-sort-filter-->
+<div class="row align-items-end" style="height: 20px;">
+  <table class="table table-hover" style="height: 20%;">
+    <tbody>
+      <tr style="background-color: #7886C7 !important; color: rgb(113, 74, 23) !important;">
+        <th scope="row"></th>
+        <td>
+          <div class="container-fluid">
+            <form id="searchForm" class="d-flex" role="search">
+              <input id="searchInput" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button type="submit" class="btn btn-outline-body-bg" style="color: #7886C7; width: 10%;"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+          </div>
+        </td>
+        <td>
+          <select id="filterSelect" class="form-select form-select-sm" aria-label="Small select example" style="height: 100%;">
+            <option selected>Filter</option>
+            <option value="all">All reviews</option>
+            <option value="5">★★★★★</option>
+            <option value="4">★★★★</option>
+            <option value="3">★★★</option>
+            <option value="2">★★</option>
+            <option value="1">★</option>
+          </select>
+        </td>
+        <td>
+          <select id="sortSelect" class="form-select form-select-sm" aria-label="Small select example" style="height: 100%;">
+            <option selected>Sort</option>
+            <option value="new to old">old to new</option>
+            <option value="old to new">new to old</option>
+            <option value="highest rated">lowest rated</option>
+            <option value="lowest rated">highest rated</option>
+          </select>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<br>
+
+
+<div class="container w-50 mt-5">
+  <form id="reviewForm" novalidate>
+    <p>
+      <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" style="background-color: #7886c7; width: 50vw;">
+        Add Review
+      </a>
+    </p>
+    <div class="collapse" id="collapseExample">
+      <div class="card card-body">
+        <div class="mb-3">
+          <label for="courseName" class="form-label">Course Name</label>
+          <input type="text" class="form-control" id="courseName" placeholder="Enter course name" required>
+        </div>
+        <div class="mb-3">
+          <label for="instructorName" class="form-label">Instructor</label>
+          <input type="text" class="form-control" id="instructorName" placeholder="Enter name of instructor" required>
+        </div>
+        <div class="mb-3">
+          <label for="rating" class="form-label">Rating</label>
+          <input type="number" class="form-control" id="rating" placeholder="Rating (1-5)" required>
+        </div>
+        <div class="mb-3">
+          <label for="comment" class="form-label">Review</label>
+          <input type="text" class="form-control" id="comment" placeholder="Add review" required>
+        </div>
+        <input class="btn btn-primary" type="submit" value="Submit" style="background-color: #7886c7;">
+        <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" style="background-color: #7886c7;">
+          Cancel
+        </a>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div id="loadingIndicator" style="display: none; color: white;">Loading reviews...</div>
+<div id="reviewsContainer" class="mt-4"></div>
+
+
+
+
+
+
+
+       <!--pagination-->
+       
+       <div class="container my-4">
+        <nav aria-label="Page navigation">
+          <ul class="pagination d-flex justify-content-center custom-pagination">
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item active"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+          </ul>
+        </nav>
+      </div>
+
+  
+
+      </section>        
+              
+    <script src="reviews.js"></script>   
+</body>
+</html>
