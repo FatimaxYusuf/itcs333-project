@@ -1,0 +1,51 @@
+:root {
+    --bg-light: #FFF2F2;
+    --primary: #A9B5DF;
+    --accent: #7886C7;
+    --text-dark: #2D336B;
+    --white: #fff;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  body {
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+  
+  .form-card {
+    background-color: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+    max-width: 700px;
+    margin: auto;
+  }
+  
+  label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+  
+  input, textarea, select {
+    font-size: 0.95rem;
+  }
+  
+  textarea {
+    resize: vertical;
+  }
+  
+  @media (max-width: 576px) {
+    .form-card {
+      padding: 1.2rem;
+    }
+  }
+  
