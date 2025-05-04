@@ -83,10 +83,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 <div class="event-description">
                     ${event.description} ${event.time ? `at ${event.time}` : ""} in ${event.location}.
                 </div>
-                <div class="EditButton">
-                    <button type="button" class="btn btn-primary btn-sm">Edit</button>
-                    <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                </div>
+              <div class="EditButton">
+             <button type="button" class="btn btn-primary btn-sm" data-index="${events.findIndex(e => e.title === event.title && e.date === event.date)}">Edit</button>
+             <button type="button" class="btn btn-danger btn-sm">Delete</button>
+</div>
+
             </div>
         `;
         return col;
@@ -122,23 +123,21 @@ document.addEventListener("click", function (e) {
                 localStorage.setItem("events", JSON.stringify(events)); // Update localStorage
                 card.remove(); // Remove the card from the DOM
                 alert("Event deleted successfully!");
-            } else {
-                alert("Event not found!");
             }
         }
     }
+    // Ensure the Edit button click event stores event data and redirects
     if (e.target.classList.contains("btn-primary")) {
-        const card = e.target.closest(".event-card");
-        const title = card.querySelector(".event-title").textContent;
-        const date = new Date(card.querySelector(".event-date").textContent).toISOString().split("T")[0];
-
+        const index = parseInt(e.target.getAttribute("data-index"));
         let events = JSON.parse(localStorage.getItem("events")) || [];
-        const index = events.findIndex(event => event.title === title && event.date === date);
-        if (index !== -1) {
-            localStorage.setItem("editIndex", index);
-            window.location.href = "addEvents.html";
+      
+        if (!isNaN(index) && events[index]) {
+          localStorage.setItem("editEvent", JSON.stringify(events[index]));
+          localStorage.setItem("editIndex", index);
+          window.location.href = "../Event%20Calender/addEvents.html";
         }
-    }
+      }
+      
 });
 document.addEventListener("DOMContentLoaded", function () {
 
