@@ -79,24 +79,7 @@
   </div>
 
   <!-- JavaScript -->
-  <script src="../phase2CourseR/add-events.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const eventToEdit = JSON.parse(localStorage.getItem("eventToEdit"));
-        if (eventToEdit) {
-            document.getElementById("eventTitle").value = eventToEdit.title;
-            document.getElementById("eventDate").value = eventToEdit.date;
-            document.getElementById("eventTime").value = eventToEdit.time || "";
-            document.getElementById("eventLocation").value = eventToEdit.location;
-            document.getElementById("eventCategory").value = eventToEdit.category || "";
-            document.getElementById("eventDescription").value = eventToEdit.description || "";
-        }
-
-        const form = document.getElementById("eventForm");
-        form.addEventListener("submit", function () {
-            localStorage.removeItem("eventToEdit");
-        });
-    });
-  </script>
+  <script src="../phase2CourseR/add-events.js"></script> <!-- Corrected path to match folder structure -->
+ 
 </body>
 </html>
