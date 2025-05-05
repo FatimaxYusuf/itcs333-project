@@ -1,0 +1,40 @@
+[
+    {
+      "course": "MATH210",
+      "instructor": "Dr. Ali",
+      "rating": 4,
+      "comment": "Very useful but needs high concentration."
+    },
+    {
+      "course": "ENG100",
+      "instructor": "Dr. Lisa",
+      "rating": 2,
+      "comment": "Boring course, not well explained."
+    },
+    {
+      "course": "CS301",
+      "instructor": "Dr. John",
+      "rating": 5,
+      "comment": "Best programming course I've taken, practical applications are excellent."
+    },
+    {
+      "course": "PHY110",
+      "instructor": "Dr. Ahmad",
+      "rating": 3,
+      "comment": "Good introduction, but labs were a bit confusing."
+    },
+    {
+      "course": "HIST200",
+      "instructor": "Dr. Mona",
+      "rating": 4,
+      "comment": "Engaging lectures and fair grading."
+    },
+    {
+      "course": "CHEM101",
+      "instructor": "Dr. Samir",
+      "rating": 2,
+      "comment": "Material was hard to follow without extra reading."
+    }
+    
+  ]
+  
