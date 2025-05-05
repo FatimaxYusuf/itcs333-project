@@ -1,3 +1,53 @@
+if (!localStorage.getItem("events")) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const sampleEvents = [
+        {
+            title: "Bahrain Science Expo",
+            date: today.toISOString().split("T")[0], // Today
+            time: "9:00 AM",
+            location: " Bulding CA",
+            description: "A showcase of scientific innovations and student projects.",
+            category: "Education"
+        },
+        {
+            title: "Startup Bahrain Meetup",
+            date: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 3).toISOString().split("T")[0], // 3 days later
+            time: "6:00 PM",
+            location: "Open lab",
+            description: "Networking event for local entrepreneurs and investors.",
+            category: "Business"
+        },
+        {
+            title: "Beach Cleanup Campaign",
+            date: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 12).toISOString().split("T")[0], // 12 days later
+            time: "7:30 AM",
+            location: "Amwaj Islands",
+            description: "Join volunteers in keeping Bahrain’s shores clean.",
+            category: "Environment"
+        },
+        {
+            title: "Bahrain National Day Parade",
+            date: new Date(today.getFullYear(), 11, 16).toISOString().split("T")[0], // December 16
+            time: "4:00 PM",
+            location: "Abdulaziz Hall",
+            description: "Celebrate Bahrain’s National Day with fireworks and parade.",
+            category: "Cultural"
+        },
+        {
+            title: "Manama International Book Fair",
+            date: new Date(today.getFullYear(), 9, 20).toISOString().split("T")[0], // October 20
+            time: "10:00 AM",
+            location: "Bahrain National Museum",
+            description: "Explore thousands of books and attend author talks.",
+            category: "Education"
+        }
+    ];
+
+    localStorage.setItem("events", JSON.stringify(sampleEvents));
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     const events = JSON.parse(localStorage.getItem("events")) || []; // Retrieve existing events from localStorage
     const today = new Date(); // Get today's date
@@ -93,9 +143,29 @@ document.addEventListener("DOMContentLoaded", function () {
         return col;
     }
 
-    function appendEvents(eventsArray, sectionId) {
+    function sortEvents(eventsArray) {
+        eventsArray.sort((a, b) => {
+            const dateA = new Date(`${a.date}T${a.time || '00:00'}`);
+            const dateB = new Date(`${b.date}T${b.time || '00:00'}`);
+            return dateA - dateB;
+        });
+    }
+    
+    sortEvents(todayEvents);
+    sortEvents(nextWeekEvents);
+    sortEvents(nextMonthEvents);
+    sortEvents(thisYearEvents);
+    
+
+    function appendEvents(eventsArray, sectionId , label) {
         const section = document.getElementById(sectionId);
         const row = section.querySelector(".row");
+        if(eventsArray.length === 0) {
+            const noEventsMessage = document.createElement("div");
+            noEventsMessage.className = "no-events-message";
+            noEventsMessage.textContent = `No events ${label}.`;
+            row.appendChild(noEventsMessage);
+        }
         eventsArray.forEach(event => {
             const eventCard = createEventCard(event);
             row.appendChild(eventCard);
@@ -103,10 +173,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Call appendEvents for each category
-    appendEvents(todayEvents, "today-events");
-    appendEvents(nextWeekEvents, "next-week-events");
-    appendEvents(nextMonthEvents, "this-month-events");
-    appendEvents(thisYearEvents, "this-year-events");
+    appendEvents(todayEvents, "today-events" , "for today");
+    appendEvents(nextWeekEvents, "next-week-events" , "for this week");
+    appendEvents(nextMonthEvents, "this-month-events" , "for this month");
+    appendEvents(thisYearEvents, "this-year-events" , "for this year");
 });
 document.addEventListener("click", function (e) {
     if (e.target.classList.contains("btn-danger")) {
