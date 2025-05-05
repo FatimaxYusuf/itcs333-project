@@ -220,3 +220,4 @@ function renderPaginationControls(totalReviews) {
   });
   paginationContainer.appendChild(nextItem);
 }
+//
