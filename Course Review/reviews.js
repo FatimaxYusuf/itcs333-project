@@ -103,7 +103,8 @@ function addReviewToPage(review) {
   commentBtn.style = "background-color: var(--bg-light) !important; color: var(--text-dark);";
   commentBtn.innerHTML = '<i class="fa-solid fa-comments"></i> ';
   commentBtn.addEventListener("click", function () {
-    const path = window.location.origin + "/commnt.html";
+    const path = window.location.origin + "/Course Review/commnt.html";
+
     window.location.href = `${path}?course=${encodeURIComponent(review.course)}&instructor=${encodeURIComponent(review.instructor)}&rating=${review.rating}&comment=${encodeURIComponent(review.comment)}`;
   });
   
