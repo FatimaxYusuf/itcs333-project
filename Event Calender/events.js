@@ -59,9 +59,9 @@ if (!localStorage.getItem("events")) {
 document.addEventListener("DOMContentLoaded", function () {
     const events = JSON.parse(localStorage.getItem("events")) || []; // Retrieve existing events from localStorage
     // Phase 3: Sync events to backend (Replit PHP + MySQL)
-fetch("https://d8198667-ff75-455a-b79b-07dd0d479be4-00-r4gn5klvlyu4.pike.replit.dev/sync-events.php", {
-  method: "POST",
-  headers: {
+    fetch("https://d8198667-ff75-455a-b79b-07dd0d479be4-00-r4gn5klvlyu4.pike.replit.dev/sync-events.php", {
+    method: "POST",
+     headers: {
     "Content-Type": "application/json"
   },
   body: JSON.stringify(events)
@@ -259,9 +259,9 @@ searchDateInput.addEventListener("change", renderSearchResults);
         const section = document.getElementById(sectionId);
          if (!section) return;
         const row = section.querySelector(".row");
-         if (!section) return;
+         if (!row) return;
         
-         if(eventsArray.length === 0) {
+         if(eventsArray.length === 0 && sectionId !== "previous-events-container") {
             const noEventsMessage = document.createElement("div");
             noEventsMessage.className = "no-events-message";
             noEventsMessage.textContent = `No events ${label}.`;
@@ -269,6 +269,7 @@ searchDateInput.addEventListener("change", renderSearchResults);
         }
         eventsArray.forEach(event => {
             const eventCard = createEventCard(event);
+
             row.appendChild(eventCard);
         });
     }
@@ -284,17 +285,21 @@ searchDateInput.addEventListener("change", renderSearchResults);
 document.addEventListener("click", function (e) {
     if (e.target.classList.contains("btn-danger")) {
         const card = e.target.closest(".event-card");
-        const eventTitle = card.querySelector(".event-title").textContent;
-        const eventDate = card.querySelector(".event-date").textContent;
+        const eventTitle = card.querySelector(".event-title").textContent.trim();
+        // Use data-date attribute for reliable comparison
+        const eventDate = card.querySelector(".event-date").getAttribute("data-date");
 
         const confirmation = confirm(`Are you sure you want to delete the event "${eventTitle}" scheduled on ${eventDate}?`);
         if (confirmation) {
-            let events = JSON.parse(localStorage.getItem("events")) || []; // Retrieve existing events from localStorage
-            const index = events.findIndex(event => event.title === eventTitle && new Date(event.date).toDateString() === eventDate);
+            let events = JSON.parse(localStorage.getItem("events")) || [];
+            // Compare using trimmed title and data-date
+            const index = events.findIndex(event =>
+                event.title.trim() === eventTitle && event.date === eventDate
+            );
             if (index !== -1) {
-                events.splice(index, 1); // Remove the event from the array
-                localStorage.setItem("events", JSON.stringify(events)); // Update localStorage
-                card.remove(); // Remove the card from the DOM
+                events.splice(index, 1);
+                localStorage.setItem("events", JSON.stringify(events));
+                card.remove();
                 alert("Event deleted successfully!");
             }
         }
@@ -477,5 +482,16 @@ document.addEventListener("click", function (e) {
       commentInput.value = "";
     }
   }
+});
+
+// Ensure editEvent and editIndex are cleared when clicking "Add New Event"
+document.addEventListener("DOMContentLoaded", function () {
+    const addEventBtn = document.querySelector('a[href="addEvents.html"], a[href="../Event%20Calender/addEvents.html"]');
+    if (addEventBtn) {
+        addEventBtn.addEventListener("click", function () {
+            localStorage.removeItem("editEvent");
+            localStorage.removeItem("editIndex");
+        });
+    }
 });
 
