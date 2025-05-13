@@ -58,6 +58,15 @@ if (!localStorage.getItem("events")) {
 
 document.addEventListener("DOMContentLoaded", function () {
     const events = JSON.parse(localStorage.getItem("events")) || []; // Retrieve existing events from localStorage
+    // Phase 3: Sync events to backend (Replit PHP + MySQL)
+fetch("https://d8198667-ff75-455a-b79b-07dd0d479be4-00-r4gn5klvlyu4.pike.replit.dev/sync-events.php", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(events)
+})
+
     const today = new Date(); // Get today's date
     today.setHours(0, 0, 0, 0); // Normalize the time to midnight for accurate comparison
 
@@ -248,8 +257,11 @@ searchDateInput.addEventListener("change", renderSearchResults);
 
     function appendEvents(eventsArray, sectionId , label) {
         const section = document.getElementById(sectionId);
+         if (!section) return;
         const row = section.querySelector(".row");
-        if(eventsArray.length === 0) {
+         if (!section) return;
+        
+         if(eventsArray.length === 0) {
             const noEventsMessage = document.createElement("div");
             noEventsMessage.className = "no-events-message";
             noEventsMessage.textContent = `No events ${label}.`;
