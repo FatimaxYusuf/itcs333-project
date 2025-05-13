@@ -139,12 +139,30 @@ document.addEventListener("DOMContentLoaded", function () {
         const col = document.createElement("div");
         col.className = "col";
         col.innerHTML = `
+      
+
             <div class="event-card">
                 <div class="event-date">${new Date(event.date).toDateString()}</div>
                 <div class="event-title">${event.title}</div>
                 <div class="event-description">
                     ${event.description} ${event.time ? `at ${event.time}` : ""} in ${event.location}.
                 </div>
+
+                <!-- Comment Icon -->
+                <div class="mt-2">
+                 <button class="btn btn-sm btn-outline-secondary toggle-comment-btn">
+                 💬 Comments
+                 </button>
+                </div>
+
+                <!-- Hidden comment section -->
+                 <div class="comment-section mt-3" style="display: none;">
+                  <textarea class="form-control comment-input" rows="2" placeholder="Write a comment..."></textarea>
+                 <button class="btn btn-sm btn-primary mt-2 submit-comment-btn">Submit</button>
+                 <ul class="comment-list mt-3"></ul>
+               </div>
+
+
               <div class="EditButton">
              <button type="button" class="btn btn-primary btn-sm" data-index="${events.findIndex(e => e.title === event.title && e.date === event.date)}">Edit</button>
              <button type="button" class="btn btn-danger btn-sm">Delete</button>
@@ -152,6 +170,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
             </div>
         `;
+          const commentList = col.querySelector(".comment-list");
+        const key = `comments_${event.title}_${new Date(event.date).toDateString()}`;
+        const savedComments = JSON.parse(localStorage.getItem(key)) || [];
+        savedComments.forEach(text => {
+         const li = document.createElement("li");
+         li.textContent = text;
+  commentList.appendChild(li);
+});
         return col;
     }
     const searchTextInput = document.getElementById("searchText");
@@ -405,3 +431,31 @@ document.addEventListener("DOMContentLoaded", function () {
     clearSearchText.addEventListener("click", resetSearch);
     clearSearchDate.addEventListener("click", resetSearch);
 });
+document.addEventListener("click", function (e) {
+  if (e.target.classList.contains("toggle-comment-btn")) {
+    const commentSection = e.target.closest(".event-card").querySelector(".comment-section");
+    commentSection.style.display = commentSection.style.display === "none" ? "block" : "none";
+  }
+
+  if (e.target.classList.contains("submit-comment-btn")) {
+    const card = e.target.closest(".event-card");
+    const title = card.querySelector(".event-title").innerText;
+    const date = card.querySelector(".event-date").innerText;
+    const commentInput = card.querySelector(".comment-input");
+    const commentList = card.querySelector(".comment-list");
+
+    const commentText = commentInput.value.trim();
+    if (commentText !== "") {
+      const key = `comments_${title}_${date}`;
+      const existingComments = JSON.parse(localStorage.getItem(key)) || [];
+      existingComments.push(commentText);
+      localStorage.setItem(key, JSON.stringify(existingComments));
+
+      const li = document.createElement("li");
+      li.textContent = commentText;
+      commentList.appendChild(li);
+      commentInput.value = "";
+    }
+  }
+});
+
