@@ -139,14 +139,15 @@ document.addEventListener("DOMContentLoaded", function () {
         const col = document.createElement("div");
         col.className = "col";
         col.innerHTML = `
-      
-
             <div class="event-card">
-                <div class="event-date">${new Date(event.date).toDateString()}</div>
                 <div class="event-title">${event.title}</div>
+                <div class="event-date" data-date="${event.date}">
+                 ${new Date(event.date).toDateString()}</div>
                 <div class="event-description">
                     ${event.description} ${event.time ? `at ${event.time}` : ""} in ${event.location}.
                 </div>
+
+               
 
                 <!-- Comment Icon -->
                 <div class="mt-2">
@@ -342,7 +343,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function filterEvents() {
         const text = searchText.value.toLowerCase().trim();
-        const date = searchDate.value;
+        let date = searchDate.value;
+        if (date) {
+        const parsed = new Date(date);
+        if (!isNaN(parsed)) {
+    date = parsed.toISOString().split("T")[0]; // Convert to YYYY-MM-DD
+  }
+}
+
 
         const allEventCards = document.querySelectorAll(".event-card");
         let hasResults = false;
@@ -352,7 +360,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const title = card.querySelector(".event-title").textContent.toLowerCase();
             const description = card.querySelector(".event-description").textContent.toLowerCase();
             const eventDateElement = card.querySelector(".event-date");
-            const eventDate = eventDateElement ? new Date(eventDateElement.textContent).toISOString().split("T")[0] : "";
+            const eventDate = eventDateElement.getAttribute("data-date") || "";
 
             const matchesText = text === "" || title.includes(text) || description.includes(text);
             const matchesDate = date === "" || eventDate === date;
