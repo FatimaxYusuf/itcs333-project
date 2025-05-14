@@ -5,7 +5,7 @@ const reviewsPerPage = 5;
 window.onload = function () {
   const loadingIndicator = document.getElementById("loadingIndicator");
   loadingIndicator.style.display = "block";
-
+//
   fetch("reviews.json")
     .then((response) => response.json())
     .then((reviews) => {
