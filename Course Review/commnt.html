@@ -2,8 +2,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Course Detail</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -40,9 +40,11 @@
 </head>
 <body>
   <div class="container p-4">
-    
-    <div id="reviewDetails" class="card bg-dark text-white">
-    </div>
+ <div id="reviewDetails" class="card bg-dark text-white"></div>
+
+
+
+
     <section class="mt-5">
       <h4>Comments</h4>
       <div class="mb-3">
@@ -57,68 +59,89 @@
   </div>
 
   <script>
-    window.onload = function () {
-    
-      const urlParams = new URLSearchParams(window.location.search);
-      const course = urlParams.get("course");
-      const instructor = urlParams.get("instructor");
-      const rating = urlParams.get("rating");
-      const comment = urlParams.get("comment");
+    const urlParams = new URLSearchParams(window.location.search);
+    const review_id = urlParams.get("review_id");
+    const course = urlParams.get("course_name");
+    const instructor = urlParams.get("instructor_name");
+    const rating = urlParams.get("rating");
+    const reviewComment = urlParams.get("comment");
 
-     
-      if (course && instructor && rating && comment) {
-     
-        const detailsContainer = document.getElementById("reviewDetails");
-        detailsContainer.innerHTML = `
-  <div class="card-header">
-    <h5 class="mb-0 text-wrap">${course}</h5>
-  </div>
-  <div class="card-body">
-    <h6 class="card-title text-wrap">Instructor: ${instructor}</h6>
-    <p class="card-text text-wrap">
-      <strong>Rating:</strong> ${"★".repeat(rating)} (${rating}/5)<br><br>
-      <strong>Comment:</strong> ${comment}
-    </p>
-    <button type="button" class="btn btn-custom btn-lg" onclick="goBack()"><i class="fa-solid fa-backward"></i> Back</button>
-    <button type="button" class="btn btn-custom btn-lg" onclick="deleteReview()"><i class="fa-solid fa-trash"></i> Delete</button>
-    <button type="button" class="btn btn-custom btn-lg" onclick="editReview()"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+    const apiUrl = "https://1b5b9e95-a129-4bd3-9f96-4210d4c9a495-00-uw4tvn1owecu.pike.replit.dev/comments.php";
+
+    window.onload = () => {
+    
+      const detailsContainer = document.getElementById("reviewDetails");
+      detailsContainer.innerHTML = `
+        <div class="card-header">
+          <h5 class="mb-0 text-wrap">${course || 'Course Name'}</h5>
+        </div>
+        <div class="card-body">
+          <h6 class="card-title text-wrap">Instructor: ${instructor || 'Unknown'}</h6>
+          <p class="card-text text-wrap">
+            <strong>Rating:</strong> ${"★".repeat(rating)} (${rating}/5)<br><br>
+            <strong>Comment:</strong> ${reviewComment}
+          </p>
+          <button type="button" class="btn btn-custom btn-lg" onclick="goBack()"><i class="fa-solid fa-backward"></i> Back</button>
+        </div>
+      `;
+
+      
+      fetch(`${apiUrl}?review_id=${review_id}`)
+        .then(res => res.json())
+        .then(data => {
+          const container = document.getElementById("existingComments");
+          container.innerHTML = '';
+          if (data.success && data.data.length > 0) {
+            data.data.forEach(comment => {
+            const commentDiv = document.createElement("div");
+commentDiv.className = "card shadow-sm mb-3 border-0";
+commentDiv.innerHTML = `
+  <div class="card-body rounded-4" style="background-color: var(--bg-light); border-left: 5px solid var(--accent);">
+    <p class="mb-2 text-dark"><i class="fa-solid fa-comment-dots text-primary me-2"></i>${comment.text}</p>
+    <small class="text-muted">${new Date(comment.created_at).toLocaleString()}</small>
   </div>
 `;
+container.appendChild(commentDiv);
 
-      } else {
-        alert("No review details found!");
-      }
+            });
+          } else {
+            container.innerHTML = "<p>No comments yet.</p>";
+          }
+        })
+        .catch(err => console.error("Error fetching comments:", err));
     };
 
-  
-    function goBack() {
-      window.history.back();
-    }
-
-    
-    function deleteReview() {
-      if (confirm("Are you sure you want to delete this review?")) {
-        alert("Review deleted!");
-      }
-    }
-
-
-    function editReview() {
-      alert("Editing review...");
-    }
-
-  
     function postComment() {
       const commentText = document.getElementById("commentText").value.trim();
-      if (commentText) {
-        const commentDiv = document.createElement("div");
-        commentDiv.classList.add("border", "p-3", "rounded", "bg-light");
-        commentDiv.innerHTML = `<strong>Your Comment:</strong><p>${commentText}</p>`;
-        document.getElementById("existingComments").appendChild(commentDiv);
-        document.getElementById("commentText").value = '';
-      } else {
+      if (!commentText) {
         alert("Please write a comment before posting.");
+        return;
       }
+
+      fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          review_id: review_id,
+          text: commentText
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          document.getElementById("commentText").value = "";
+          window.location.reload();
+        } else {
+          alert("Failed to post comment.");
+        }
+      })
+      .catch(err => console.error("Error posting comment:", err));
+    }
+
+    function goBack() {
+      window.history.back();
     }
   </script>
 </body>
