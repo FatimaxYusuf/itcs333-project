@@ -7,7 +7,6 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-
   <style>
     :root {
       --bg-light: #FFF2F2;
@@ -31,7 +30,6 @@
       min-height: 100vh;
     }
 
-    
     .menue {
       position: fixed;
       height: 100vh;
@@ -64,7 +62,6 @@
       border-radius: 5px;
       cursor: pointer;
       font-size: 23px;
-      transition: all 0.3s ease;
     }
 
     #btn:checked ~ .menu-btn {
@@ -79,7 +76,6 @@
       height: 100%;
       width: 100%;
       background: var(--nav-bg);
-      overflow: hidden;
     }
 
     #sidebar .title {
@@ -98,9 +94,8 @@
 
     #sidebar .list li {
       line-height: 50px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       padding-left: 30px;
-      transition: all 0.3s ease;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     #sidebar .list li:hover {
@@ -124,11 +119,10 @@
       padding: 32px;
       transition: margin-left 0.3s ease;
     }
-    
+
     #btn:checked ~ .main-content {
       margin-left: 250px;
     }
-    
 
     header {
       font-size: 45px;
@@ -168,7 +162,6 @@
       border-radius: 8px;
       font-size: 16px;
       text-decoration: none;
-      display: inline-block;
     }
 
     .add-button:hover {
@@ -181,7 +174,26 @@
       gap: 16px;
     }
 
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 32px;
+    }
+
+    .pagination button {
+      background-color: white;
+      border: 1px solid #ccc;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
     .news-card {
+      display: none;
+    }
+
+    .news-card.active {
       display: flex;
       background-color: white;
       border-radius: 16px;
@@ -225,34 +237,6 @@
       align-items: center;
       color: #666;
     }
-
-    
-
-    .pagination {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 32px;
-    }
-
-    .pagination button {
-      background-color: white;
-      border: 1px solid #ccc;
-      padding: 8px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    .news-card {
-  display: none;
- 
-}
-
-.news-card.active {
-  display: flex;
-  
-}
-    
 
     @media (max-width: 768px) {
       .main-content {
@@ -301,7 +285,7 @@
         <li><a href="#"><i class="fa-solid fa-user-group"></i> Study Group Finder</a></li>
         <li><a href="#"><i class="fa-solid fa-file-pen"></i> Course Reviews</a></li>
         <li><a href="#"><i class="fa-solid fa-book"></i> Course Notes</a></li>
-        <li><a href="campusnewsmain.html"><i class="fa-solid fa-newspaper"></i> Campus News</a></li>
+        <li><a href="index.html"><i class="fa-solid fa-newspaper"></i> Campus News</a></li>
       </ul>
     </nav>
   </div>
@@ -324,63 +308,17 @@
         <select class="form-select">
           <option>Sort by: Newest</option>
           <option>Oldest</option>
-          
         </select>
       </div>
       <div class="right-controls">
-        <a href="addnewss.html" class="add-button btn btn-primary">+ Add New</a>
+        <a href="add-news.html" class="add-button btn btn-primary">+ Add New</a>
       </div>
     </div>
 
-    <div class="news-list">
-      <div class="news-card">
-        <img src="https://i.pinimg.com/474x/d9/9c/c7/d99cc7fc0166ce34eb37a36cece71a94.jpg" alt="News">
-        <div class="news-content">
-          <div class="news-title">Engineering Students Unveil Solar-Powered Vehicle Prototype</div>
-          <div class="news-summary">A group of final-year students from the College of Engineering revealed their solar-powered vehicle prototype during a public demonstration
-             on campus. The project, aimed at promoting sustainable transportation, drew attention from faculty, media, and local startups.</div>
-          <div class="news-meta">
-            <span>April 5, 2025 • College of Engineering</span>
-            <a href="readmore.html">Read More</a>
-          </div>
-        </div>
-        
-      </div>
-      <div class="news-card">
-        <img src="https://i.pinimg.com/474x/25/c2/e4/25c2e412f023ed461138be1c8f1327a3.jpg" alt="News">
-        <div class="news-content">
-          <div class="news-title">Art Students Showcase Urban Landscape Collage Series</div>
-          <div class="news-summary">Graduating fine arts students unveiled a mixed-media collage series inspired by urban 
-            landscapes at a campus gallery opening, drawing attention from faculty and the local art scene.</div>
-          <div class="news-meta">
-            <span>April 28, 2024 • College of Arts</span>
-            <a href="readmore.html">Read More</a>
-          </div>
-        </div>
-      </div>
-      <div class="news-card">
-        <img src="https://i.pinimg.com/474x/a9/7c/37/a97c37dfd882d5c005abc54298d5525e.jpg" alt="News">
-        <div class="news-content">
-          <div class="news-title">Building Cybersecurity Skills at Our IT College</div>
-          <div class="news-summary">As cyber threats increase, our IT college is strengthening cybersecurity education. Students 
-            are learning to protect data and systems through specialized courses, hands-on labs, and expert-led workshops.</div>
-          <div class="news-meta">
-            <span>May 5, 2024 • College of Information Technology</span>
-            <a href="readmore.html">Read More</a>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="pagination">
-      <button class="btn btn-outline-secondary">&laquo; Prev</button>
-      <button class="btn btn-outline-secondary">1</button>
-      <button class="btn btn-outline-secondary">2</button>
-      <button class="btn btn-outline-secondary">3</button>
-      <button class="btn btn-outline-secondary">Next &raquo;</button>
-    </div>
+    <div class="news-list"></div>
+    <div class="pagination"></div>
   </div>
-  <script src="news-2.js"></script>
+
+  <script src="index.js"></script>
 </body>
 </html>

@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Details View</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    <style>
+      :root {
+        --bg-light: #fff2f2;
+        --primary: #a9b5df;
+        --accent: #7886c7;
+        --text-dark: #2d336b;
+        --nav-bg: #7886c7;
+        --nav-hover: #a9b5df;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+
+      body {
+        background-color: var(--bg-light);
+        color: var(--text-dark);
+        min-height: 100vh;
+      }
+
+      .menue {
+        position: fixed;
+        height: 100vh;
+        width: 250px;
+        z-index: 1000;
+        left: -250px;
+        transition: all 0.3s ease;
+      }
+
+      #btn:checked ~ .menue {
+        left: 0;
+      }
+
+      input[type="checkbox"] {
+        display: none;
+      }
+
+      .menu-btn {
+        position: fixed;
+        top: 10px;
+        left: 20px;
+        height: 45px;
+        width: 45px;
+        z-index: 999;
+        color: white;
+        background: var(--nav-bg);
+        border: 1px solid #333;
+        text-align: center;
+        line-height: 45px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 23px;
+        transition: all 0.3s ease;
+      }
+
+      #btn:checked ~ .menu-btn {
+        left: 270px;
+      }
+
+      #btn:checked ~ .menu-btn i:before {
+        content: "\f00d";
+      }
+
+      #sidebar {
+        height: 100%;
+        width: 100%;
+        background: var(--nav-bg);
+        overflow: hidden;
+      }
+
+      #sidebar .title {
+        color: white;
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 65px;
+        text-align: center;
+        background-color: var(--accent);
+      }
+
+      #sidebar .list {
+        list-style: none;
+        padding: 0;
+      }
+
+      #sidebar .list li {
+        line-height: 50px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-left: 30px;
+        transition: all 0.3s ease;
+      }
+
+      #sidebar .list li:hover {
+        background-color: var(--nav-hover);
+        box-shadow: inset 4px 0 0 var(--primary);
+      }
+
+      #sidebar .list li a {
+        color: white;
+        text-decoration: none;
+        font-size: 18px;
+        display: block;
+      }
+
+      #sidebar .list li a i {
+        margin-right: 15px;
+      }
+
+      .main-content {
+        margin-left: 0;
+        padding: 32px;
+        transition: margin-left 0.3s ease;
+      }
+
+      #btn:checked ~ .main-content {
+        margin-left: 250px;
+      }
+
+      #btn:checked ~ .comments-card {
+        margin-left: 250px;
+      }
+
+      .news-detail-container {
+        display: flex;
+        gap: 30px;
+        background-color: white;
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        position: relative;
+      }
+
+      .news-image-container {
+        flex: 0 0 300px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .news-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+
+      .news-content-container {
+        flex: 1;
+      }
+
+      .news-header {
+        margin-bottom: 20px;
+        position: relative;
+        padding-right: 120px;
+      }
+
+      .news-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 8px;
+        width: 100%;
+      }
+
+      .news-meta {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 15px;
+        color: #666;
+        font-size: 14px;
+      }
+
+      .news-content {
+        line-height: 1.6;
+        color: #555;
+      }
+
+      .news-content p {
+        margin-bottom: 15px;
+      }
+
+      .action-buttons {
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: flex;
+        gap: 8px;
+      }
+
+      .edit-btn,
+      .delete-btn {
+        background-color: var(--accent);
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+        color: white;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      .edit-btn:hover {
+        background-color: var(--text-dark);
+      }
+
+      .delete-btn:hover {
+        background-color: #dfa9b5;
+      }
+
+      .comments-card {
+        background-color: white;
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-top: 30px;
+        max-width: 1200px;
+      }
+
+      .comments-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .comment-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .comment {
+        background-color: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 3px solid var(--accent);
+      }
+
+      .comment-text {
+        color: #555;
+        line-height: 1.5;
+      }
+
+      .comment-form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .comment-form textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      .submit-comment {
+        background-color: var(--accent);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        align-self: flex-end;
+        transition: background-color 0.2s;
+      }
+
+      .submit-comment:hover {
+        background-color: var(--text-dark);
+      }
+
+      @media (min-width: 768px) {
+        .news-detail-container {
+          flex-direction: row;
+          flex-wrap: wrap;
+          gap: 30px;
+          padding: 30px;
+        }
+
+        .news-image-container {
+          flex: 0 0 300px;
+          max-width: 300px;
+          margin-bottom: 0;
+        }
+
+        .news-image {
+          width: 100%;
+          height: auto;
+          object-fit: cover;
+        }
+
+        .news-content-container {
+          flex: 1;
+        }
+
+        .news-title {
+          font-size: 28px;
+          padding-right: 120px;
+        }
+
+        .action-buttons {
+          position: absolute;
+          top: 0;
+          right: 0;
+          margin-bottom: 0;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .main-content {
+          margin-left: 0;
+          padding: 16px;
+        }
+
+        .news-detail-container {
+          flex-direction: column;
+          gap: 20px;
+          padding: 20px;
+        }
+
+        .news-image-container {
+          width: 100%;
+          flex: none;
+        }
+
+        .news-image {
+          width: 100%;
+          height: auto;
+          object-fit: cover;
+        }
+
+        .news-content-container {
+          width: 100%;
+        }
+
+        .news-title {
+          font-size: 24px;
+          padding-right: 0;
+        }
+
+        .news-meta {
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+
+        .action-buttons {
+          position: static;
+          margin-top: 10px;
+          display: flex;
+          justify-content: flex-start;
+          gap: 10px;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .news-meta {
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .news-title {
+          font-size: 20px;
+        }
+
+        .action-buttons {
+          flex-direction: column;
+          gap: 8px;
+          align-items: stretch;
+        }
+
+        .edit-btn,
+        .delete-btn {
+          width: 100%;
+        }
+
+        .comments-title {
+          font-size: 18px;
+        }
+
+        .comment-text {
+          font-size: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <input type="checkbox" id="btn" />
+    <label for="btn" class="menu-btn">
+      <i class="fas fa-bars"></i>
+    </label>
+    <div class="menue">
+      <nav id="sidebar">
+        <div class="title">Campus Hub</div>
+        <ul class="list">
+          <li>
+            <a href="#">
+              <i class="fa-solid fa-calendar-days"></i> Events calendar
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fa-solid fa-user-group"></i> Study Group Finder
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fa-solid fa-file-pen"></i> Course Reviews
+            </a>
+          </li>
+          <li>
+            <a href="#"> <i class="fa-solid fa-book"></i> Course Notes </a>
+          </li>
+          <li>
+            <a href="index.html">
+              <i class="fa-solid fa-newspaper"></i> Campus News
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="main-content">
+      <div class="news-detail-container">
+        <div class="news-image-container">
+          <img class="news-image" id="news-image" src="" alt="News image" />
+        </div>
+        <div class="news-content-container">
+          <div class="news-header">
+            <h1 class="news-title" id="news-title">Loading...</h1>
+            <div class="action-buttons">
+              <button class="edit-btn">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button class="delete-btn">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+            <div class="news-meta">
+              <span class="date" id="news-date"></span>
+              <span class="author" id="news-author"></span>
+            </div>
+          </div>
+          <div class="news-content" id="news-content">
+            <p>Loading content...</p>
+          </div>
+        </div>
+      </div>
+      <div class="comments-card mt-4">
+        <h2 class="comments-title">Comments</h2>
+        <div class="comment-list" id="comment-list">
+          <div class="comment">
+            <div class="comment-text">This is a demo comment section.</div>
+          </div>
+        </div>
+        <div class="comment-form">
+          <textarea
+            id="comment-input"
+            placeholder="Add your comment..."
+          ></textarea>
+          <button class="submit-comment" id="submit-comment">
+            Post Comment
+          </button>
+        </div>
+      </div>
+    </div>
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const API_BASE = "https://569f349a-c435-4938-8611-4e95a25163bb-00-2c4h5lj6mxr6l.pike.replit.dev/project333/api";
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    if (!id) {
+      alert("No news ID provided.");
+      return;
+    }
+
+    let currentNewsData = null;
+
+    // Function to delete a comment
+    async function deleteComment(commentId, newsId) {
+      const res = await fetch(`${API_BASE}/comments?id=${commentId}`, {
+        method: "DELETE"
+      });
+      if (res.ok) {
+        await loadComments(newsId);
+      }
+    }
+
+    // Function to load news data
+    async function loadNewsData() {
+      try {
+        const response = await fetch(`${API_BASE}/news?id=${id}`);
+        if (!response.ok) throw new Error("News not found");
+
+        currentNewsData = await response.json();
+
+        document.getElementById("news-title").textContent = currentNewsData.title;
+        document.getElementById("news-date").textContent = currentNewsData.date;
+        document.getElementById("news-author").textContent = `By ${currentNewsData.college}`;
+        document.getElementById("news-image").src = 
+          currentNewsData.image || "https://via.placeholder.com/300";
+        document.getElementById("news-content").innerHTML = `<p>${currentNewsData.content.replace(/\n/g, "</p><p>")}</p>`;
+
+        await loadComments(id);
+      } catch (err) {
+        document.querySelector(".main-content").innerHTML =
+          `<p class="text-danger text-center">Failed to load news: ${err.message}</p>`;
+      }
+    }
+
+    // Function to load comments
+    async function loadComments(newsId) {
+      const res = await fetch(`${API_BASE}/comments?news_id=${newsId}`);
+      const comments = await res.json();
+      const commentList = document.getElementById("comment-list");
+      commentList.innerHTML = "";
+
+      comments.forEach((c) => {
+        const div = document.createElement("div");
+        div.className = "comment";
+        div.innerHTML = `
+          <div class="comment-text">${c.text}</div>
+          <button class="btn btn-sm btn-danger mt-2">Delete</button>
+        `;
+        div.querySelector("button").addEventListener("click", () => {
+          deleteComment(c.id, newsId);
+        });
+        commentList.appendChild(div);
+      });
+    }
+
+    // Function to delete the news article
+    async function deleteNews() {
+      if (confirm("Are you sure you want to delete this news article?")) {
+        try {
+          const response = await fetch(`${API_BASE}/news?id=${id}`, {
+            method: "DELETE"
+          });
+          
+          if (!response.ok) throw new Error("Failed to delete news");
+          
+          alert("News article deleted successfully!");
+          window.location.href = "index.html";
+        } catch (error) {
+          alert("Error deleting news: " + error.message);
+        }
+      }
+    }
+
+    // Function to open edit form
+    function openEditForm() {
+      if (!currentNewsData) return;
+      
+      // Create a modal form for editing
+      const modal = document.createElement("div");
+      modal.style.position = "fixed";
+      modal.style.top = "0";
+      modal.style.left = "0";
+      modal.style.width = "100%";
+      modal.style.height = "100%";
+      modal.style.backgroundColor = "rgba(0,0,0,0.5)";
+      modal.style.display = "flex";
+      modal.style.justifyContent = "center";
+      modal.style.alignItems = "center";
+      modal.style.zIndex = "1000";
+      
+      modal.innerHTML = `
+        <div style="background-color: white; padding: 30px; border-radius: 8px; width: 80%; max-width: 800px;">
+          <h2>Edit News</h2>
+          <form id="edit-news-form">
+            <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+              <div style="flex: 1; min-width: 300px;">
+                <label for="edit-title" style="font-weight: bold;">Title</label>
+                <input type="text" id="edit-title" value="${currentNewsData.title}" required style="width: 100%; padding: 8px; margin-bottom: 15px;">
+                
+                <label for="edit-college" style="font-weight: bold;">College</label>
+                <select id="edit-college" required style="width: 100%; padding: 8px; margin-bottom: 15px;">
+                  <option value="College of Engineering" ${currentNewsData.college === "College of Engineering" ? "selected" : ""}>College of Engineering</option>
+                  <option value="College of Information Technology" ${currentNewsData.college === "College of Information Technology" ? "selected" : ""}>College of Information Technology</option>
+                  <option value="College of Arts" ${currentNewsData.college === "College of Arts" ? "selected" : ""}>College of Arts</option>
+                  <option value="College of Business Administration" ${currentNewsData.college === "College of Business Administration" ? "selected" : ""}>College of Business Administration</option>
+                  <option value="College of Health & Sports Sciences" ${currentNewsData.college === "College of Health & Sports Sciences" ? "selected" : ""}>College of Health & Sports Sciences</option>
+                  <option value="Deanship of Admission & Registeration" ${currentNewsData.college === "Deanship of Admission & Registeration" ? "selected" : ""}>Deanship of Admission & Registeration</option>
+                  <option value="Library" ${currentNewsData.college === "Library" ? "selected" : ""}>Library</option>
+                </select>
+                
+                <label for="edit-date" style="font-weight: bold;">Date</label>
+                <input type="date" id="edit-date" value="${currentNewsData.date}" required style="width: 100%; padding: 8px; margin-bottom: 15px;">
+                
+                <label for="edit-image" style="font-weight: bold;">Image URL</label>
+                <input type="text" id="edit-image" value="${currentNewsData.image || ""}" placeholder="https://example.com/image.jpg" style="width: 100%; padding: 8px; margin-bottom: 15px;">
+              </div>
+              
+              <div style="flex: 1; min-width: 300px;">
+                <label for="edit-summary" style="font-weight: bold;">Summary</label>
+                <textarea id="edit-summary" style="width: 100%; padding: 8px; margin-bottom: 15px; min-height: 100px;">${currentNewsData.summary || ""}</textarea>
+                
+                <label for="edit-content" style="font-weight: bold;">Full Article</label>
+                <textarea id="edit-content" required style="width: 100%; padding: 8px; margin-bottom: 15px; min-height: 150px;">${currentNewsData.content}</textarea>
+              </div>
+            </div>
+            
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+              <button type="button" id="cancel-edit" style="padding: 8px 16px; background-color: #ccc; border: none; border-radius: 4px; cursor: pointer;">Cancel</button>
+              <button type="submit" style="padding: 8px 16px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">Save Changes</button>
+            </div>
+          </form>
+        </div>
+      `;
+      
+      document.body.appendChild(modal);
+      
+      // Handle form submission
+      modal.querySelector("#edit-news-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        
+        const updatedData = {
+          title: document.getElementById("edit-title").value.trim(),
+          college: document.getElementById("edit-college").value,
+          date: document.getElementById("edit-date").value,
+          image: document.getElementById("edit-image").value.trim(),
+          summary: document.getElementById("edit-summary").value.trim(),
+          content: document.getElementById("edit-content").value.trim()
+        };
+        
+        if (!updatedData.title || !updatedData.college || !updatedData.date || !updatedData.content) {
+          alert("Please fill in all required fields.");
+          return;
+        }
+        
+        try {
+          const response = await fetch(`${API_BASE}/news?id=${id}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(updatedData)
+          });
+          
+          if (!response.ok) throw new Error("Failed to update news");
+          
+          alert("News updated successfully!");
+          document.body.removeChild(modal);
+          await loadNewsData(); // Refresh the news data
+        } catch (error) {
+          alert("Error updating news: " + error.message);
+        }
+      });
+      
+      // Handle cancel button
+      modal.querySelector("#cancel-edit").addEventListener("click", () => {
+        document.body.removeChild(modal);
+      });
+    }
+
+    // Load initial data
+    await loadNewsData();
+
+    // Add event listeners for edit and delete buttons
+    document.querySelector(".edit-btn").addEventListener("click", openEditForm);
+    document.querySelector(".delete-btn").addEventListener("click", deleteNews);
+
+    // Add comment submission handler
+    document.getElementById("submit-comment").addEventListener("click", async () => {
+      const input = document.getElementById("comment-input");
+      const text = input.value.trim();
+      if (!text) return;
+
+      const res = await fetch(`${API_BASE}/comments`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ news_id: id, text })
+      });
+
+      if (res.ok) {
+        input.value = "";
+        await loadComments(id);
+      }
+    });
+  });
+</script>
+
+  </body>
+</html>
