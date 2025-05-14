@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Study Group Chat</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root {
+      --bg-light: #f6f7fb;
+      --primary: #A9B5DF;
+      --accent: #7886C7;
+      --text-dark: #2D336B;
+      --white: #fff;
+      --sidebar-width: 220px;
+      --menu-z: 1200;
+    }
+    body {
+      background-color: var(--bg-light);
+      font-family: 'Poppins', sans-serif;
+      color: var(--text-dark);
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      transition: margin-left 0.3s;
+      overflow-x: hidden;
+    }
+    /* Hamburger menu styles */
+    .menu-btn {
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      height: 44px;
+      width: 44px;
+      z-index: var(--menu-z);
+      color: #fff;
+      background: var(--accent);
+      border: none;
+      text-align: center;
+      line-height: 44px;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 22px;
+      transition: all 0.3s;
+      box-shadow: 0 2px 8px rgba(120,134,199,0.10);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #btn:checked ~ .menu {
+      left: 0;
+    }
+    #btn:checked ~ .menu-btn {
+      left: calc(var(--sidebar-width) + 18px);
+      background: #5f6ab3;
+    }
+    #btn:checked ~ .main-content {
+      margin-left: var(--sidebar-width);
+    }
+    #btn:checked ~ .menu-btn i:before {
+      content: "\f00d";
+    }
+    input[type="checkbox"] {
+      display: none;
+    }
+    /* Sidebar menu styles */
+    .menu {
+      position: fixed;
+      left: calc(-1 * var(--sidebar-width));
+      top: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: linear-gradient(135deg, var(--accent) 80%, var(--primary) 100%);
+      box-shadow: 2px 0 16px rgba(120,134,199,0.10);
+      z-index: var(--menu-z);
+      transition: left 0.3s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 1.5rem;
+    }
+    .menu .title {
+      color: #fff;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .menu .list {
+      list-style: none;
+      padding: 0;
+      width: 100%;
+    }
+    .menu .list li {
+      width: 100%;
+      margin-bottom: 0.2rem;
+    }
+    .menu .list li a {
+      display: flex;
+      align-items: center;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 0.7rem 1.5rem;
+      border-radius: 8px 0 0 8px;
+      transition: background 0.2s, color 0.2s;
+      font-weight: 500;
+    }
+    .menu .list li a i {
+      margin-right: 12px;
+      font-size: 1.1rem;
+    }
+    .menu .list li a:hover, .menu .list li.active a {
+      background: rgba(255,255,255,0.13);
+      color: #ffe;
+    }
+    /* Main content shift when menu open */
+    body.menu-open .main-content {
+      margin-left: var(--sidebar-width);
+      transition: margin-left 0.3s;
+    }
+    .main-content {
+      margin-left: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      background: var(--bg-light);
+      transition: margin-left 0.3s;
+      width: 100vw;
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+    @media (min-width: 1200px) {
+      .container {
+        max-width: 1000px !important;
+      }
+      .chat-container {
+        max-width: 600px !important;
+      }
+    }
+    @media (max-width: 700px) {
+      .chat-container, .card {
+        padding: 1.2rem 0.5rem 1.2rem 0.5rem !important;
+      }
+      .main-content {
+        padding: 0;
+      }
+    }
+    /* Chat and details styles (smaller, compact) */
+    .chat-container {
+      max-width: 600px;
+      width: 100%;
+      margin: 18px 0;
+      background: var(--white);
+      border-radius: 18px;
+      padding: 2rem 2rem 2rem 2rem;
+      box-shadow: 0 8px 32px rgba(120,134,199,0.13), 0 1.5px 8px rgba(120,134,199,0.07);
+      position: relative;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .chat-container:hover {
+      box-shadow: 0 12px 36px rgba(120,134,199,0.18), 0 2px 12px rgba(120,134,199,0.10);
+      transform: translateY(-2px) scale(1.01);
+    }
+    .group-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      border-bottom: 1.5px solid #e6e6e6;
+      padding-bottom: 1rem;
+    }
+    .group-header h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin: 0;
+      color: var(--text-dark);
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-shadow: 0 1px 4px rgba(120,134,199,0.07);
+    }
+    .group-header h2 i {
+      color: var(--accent);
+      font-size: 1.3rem;
+    }
+    .chat-box {
+      height: 320px;
+      overflow-y: auto;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 14px;
+      padding: 1.1rem 1rem;
+      background: linear-gradient(120deg, #f8f9fd 80%, #e9eafc 100%);
+      margin-bottom: 1.3rem;
+      box-shadow: 0 2px 8px rgba(120,134,199,0.08);
+      scroll-behavior: smooth;
+      font-size: 1.08rem;
+      transition: box-shadow 0.2s;
+    }
+    .chat-message {
+      margin-bottom: 1rem;
+      padding: 0.7rem 1.1rem;
+      background: linear-gradient(90deg, #e9eafc 80%, #f6f7fb 100%);
+      border-radius: 10px;
+      box-shadow: 0 1px 3px rgba(120,134,199,0.06);
+      position: relative;
+      transition: background 0.2s, box-shadow 0.2s;
+      animation: fadeIn 0.4s;
+      font-size: 1.05rem;
+    }
+    .chat-message:hover {
+      background: #f6f7fb;
+      box-shadow: 0 2px 8px rgba(120,134,199,0.13);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    .chat-message .sender {
+      font-weight: 700;
+      color: var(--accent);
+      margin-right: 0.5rem;
+      letter-spacing: 0.2px;
+    }
+    .chat-message .timestamp {
+      font-size: 0.85rem;
+      color: #aaa;
+      position: absolute;
+      right: 1.1rem;
+      top: 0.7rem;
+    }
+    .chat-message .text {
+      margin-top: 0.2rem;
+      color: var(--text-dark);
+      word-break: break-word;
+    }
+    .message-form input,
+    .message-form textarea {
+      margin-bottom: 10px;
+      border-radius: 10px;
+      border: 1.5px solid #ccc;
+      font-size: 1.05rem;
+      padding: 0.7rem 1.1rem;
+      background: #f8f9fd;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 1px 4px rgba(120,134,199,0.06);
+    }
+    .message-form input:focus,
+    .message-form textarea:focus {
+      border-color: var(--accent);
+      outline: none;
+      background: var(--white);
+      box-shadow: 0 2px 8px rgba(120,134,199,0.13);
+    }
+    .message-form button[type="submit"] {
+      border-radius: 10px;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--accent) 80%, var(--primary) 100%);
+      border: none;
+      color: #fff;
+      padding: 0.7rem 0;
+      font-size: 1.1rem;
+      transition: background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(120,134,199,0.10);
+      letter-spacing: 0.2px;
+    }
+    .message-form button[type="submit"]:hover {
+      background: #5f6ab3;
+      box-shadow: 0 4px 16px rgba(120,134,199,0.13);
+    }
+    /* Group details card */
+    .card {
+      border-radius: 12px !important;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 2px 8px rgba(120,134,199,0.07);
+    }
+    .card-body {
+      padding: 1rem 1rem 0.7rem 1rem !important;
+    }
+    .card .fa-users {
+      color: #fff;
+      background: var(--accent);
+      border-radius: 50%;
+      padding: 8px 10px;
+      box-shadow: 0 2px 8px rgba(120,134,199,0.13);
+    }
+    .card .row > div {
+      font-size: 0.97rem;
+    }
+    .card .row i {
+      color: var(--accent);
+    }
+    .card .text-end {
+      font-size: 0.92rem;
+    }
+    .alert-info {
+      font-size: 0.98rem;
+      padding: 0.7rem 1rem;
+    }
+    /* Hide sidebar on small screens */
+    @media (max-width: 900px) {
+      .sidebar {
+        display: none;
+      }
+      .main-content {
+        margin-left: 0 !important;
+      }
+      .menu-btn {
+        left: 10px;
+        top: 10px;
+      }
+    }
+    /* Resources section style */
+    .resources-section {
+      background: linear-gradient(120deg, #f8f9fd 80%, #e9eafc 100%);
+      border-radius: 18px;
+      box-shadow: 0 2px 8px rgba(120,134,199,0.09);
+      padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+      margin-top: 0.5rem;
+      min-height: 240px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      transition: box-shadow 0.2s;
+    }
+    .resources-section h6 {
+      font-size: 1.13rem;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 1rem;
+      letter-spacing: 0.2px;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .resources-section ul {
+      padding-left: 0;
+      margin-bottom: 0;
+      width: 100%;
+    }
+    .resources-section li {
+      margin-bottom: 0.7rem;
+      font-size: 1.03rem;
+      list-style: none;
+    }
+    .resources-section a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px dashed var(--primary);
+      transition: color 0.2s, border-bottom 0.2s;
+      padding-left: 0.2rem;
+    }
+    .resources-section a:hover {
+      color: var(--primary);
+      border-bottom: 1.5px solid var(--primary);
+      text-decoration: underline;
+    }
+    @media (max-width: 991px) {
+      .chat-container {
+        max-width: 100% !important;
+      }
+      .resources-section {
+        margin-top: 2rem;
+        min-height: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation copied from eventCalender.html -->
+  <input type="checkbox" id="btn">
+  <label for="btn" class="menu-btn">
+    <i class="fas fa-bars"></i>
+  </label>
+  <nav class="menu">
+    <div class="title">Campus Hub</div>
+    <ul class="list">
+      <li><a href="../Event Calender/eventsCalender.html"><i class="fa-solid fa-calendar-days"></i> Events Calendar</a></li>
+      <li><a href="../Study Group Finder/studyGroup.html"><i class="fa-solid fa-user-group"></i> Study Group Finder</a></li>
+      <li><a href="../Course Review/course-rev.html"><i class="fa-solid fa-file-pen"></i> Course Reviews</a></li>
+      <li><a href="../Course Notes/course-notes9.html"><i class="fa-solid fa-book"></i> Course Notes</a></li>
+      <li><a href="../CampusNews/campusnewsmain.html"><i class="fa-solid fa-newspaper"></i> Campus News</a></li>
+    </ul>
+  </nav>
+  <div class="main-content">
+    <div class="container py-4" style="max-width:900px;">
+      <!-- Notification Section -->
+      <section id="notifySection" class="mb-4">
+        <div class="alert alert-info d-flex align-items-center" role="alert" style="border-radius:14px; font-size:1.08rem; padding:1.1rem 1.3rem;">
+          <i class="fa-solid fa-bell me-2"></i>
+          <span id="notifyText">Welcome to your study group chat! Stay respectful and collaborative.</span>
+        </div>
+      </section>
+      <!-- Group Details Section -->
+      <section id="groupDetailsSection" class="mb-4">
+        <div class="card shadow-sm" style="border-radius:18px;">
+          <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+              <div class="me-3">
+                <i class="fa-solid fa-users fa-2x"></i>
+              </div>
+              <div>
+                <div id="sidebarGroupTitle" style="font-size:1.25rem;font-weight:700;color:var(--accent);letter-spacing:0.5px;"></div>
+                <div id="sidebarGroupSubject" style="font-size:1.08rem;color:#555;font-weight:500;"></div>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-6 mb-2">
+                <i class="fa-solid fa-location-dot me-1"></i> <span id="sidebarGroupLocation"></span>
+              </div>
+              <div class="col-6 mb-2">
+                <i class="fa-solid fa-calendar-day me-1"></i> <span id="sidebarGroupDay"></span>
+              </div>
+              <div class="col-6 mb-2">
+                <i class="fa-solid fa-clock me-1"></i> <span id="sidebarGroupTime"></span>
+              </div>
+              <div class="col-6 mb-2">
+                <i class="fa-solid fa-user-group me-1"></i> <span id="sidebarGroupCapacity"></span>
+              </div>
+            </div>
+            <div id="sidebarGroupDesc" style="color:#2D336B;font-size:1.08rem;margin-top:0.5rem;text-align:left;padding:0.6rem 0.7rem 0 0.7rem;border-radius:10px;background:rgba(120,134,199,0.07);"></div>
+            <div class="mt-3 text-end">
+              <span style="font-size:1rem;color:#888;">
+                <i class="fa-solid fa-circle-info me-1"></i>
+                <span id="sidebarGroupExtra"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Chat Section -->
+      <section id="chatSection">
+        <div class="row g-4">
+          <div class="col-12 col-lg-8">
+            <div class="chat-container" style="max-width:600px;padding:2rem 1.5rem 2rem 1.5rem;">
+              <div class="group-header">
+                <h2 id="groupTitle" style="font-size:1.25rem;"><i class="fa-solid fa-comments"></i> Group Chat</h2>
+              </div>
+              <div id="chatBox" class="chat-box" style="height:320px; font-size:1.08rem;">
+                <!-- Messages will load here -->
+              </div>
+              <form id="messageForm" class="message-form" method="post" autocomplete="off">
+                <input type="text" id="senderName" class="form-control" placeholder="Your name" required />
+                <textarea id="messageText" class="form-control" rows="2" placeholder="Type your message..." required></textarea>
+                <button type="submit" class="btn btn-primary w-100 mt-2">Send</button>
+              </form>
+              <div class="d-flex justify-content-center mt-3">
+                <a href="studyGroup.html"
+                   class="btn"
+                   style="
+                     background: transparent;
+                     color: #FF6B6B;
+                     border: none;
+                     border-radius: 50px;
+                     font-weight: 600;
+                     font-size: 1rem;
+                     padding: 0.3rem 1.1rem 0.3rem 0.9rem;
+                     box-shadow: none;
+                     transition: background 0.18s, color 0.18s;
+                     display: inline-flex;
+                     align-items: center;
+                     gap: 0.3rem;
+                   "
+                   onmouseover="this.style.background='#ffeaea';this.style.color='#d9534f';"
+                   onmouseout="this.style.background='transparent';this.style.color='#FF6B6B';"
+                >
+                  <i class="fa-solid fa-arrow-left"></i> Leave Group
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-lg-4">
+            <div class="resources-section">
+              <h6 class="fw-bold mt-2 mb-3">📚 Resources</h6>
+              <ul class="list-unstyled small mb-0">
+                <li><a href="https://leetcode.com/" target="_blank">Leetcode Playlist</a></li>
+                <li><a href="https://visualgo.net/en" target="_blank">Visual Algo (Data Structures Visualizer)</a></li>
+                <li><a href="https://drive.google.com/file/d/1kQw-Graphs-Explained" target="_blank">Graphs Explained (PDF)</a></li>
+                <li><a href="https://excalidraw.com/" target="_blank">Whiteboard Tool</a></li>
+                <li><a href="https://www.geeksforgeeks.org/data-structures/" target="_blank">GeeksforGeeks Data Structures</a></li>
+                <li><a href="https://www.khanacademy.org/computing/computer-science/algorithms" target="_blank">Khan Academy Algorithms</a></li>
+                <li><a href="https://www.youtube.com/playlist?list=PL9ooVrP1hQOHUKuqGuiWLQoJ-LD25KxI5" target="_blank">YouTube: Operating Systems Concepts</a></li>
+                <li><a href="https://www.overleaf.com/" target="_blank">Overleaf (LaTeX Collaboration)</a></li>
+                <li><a href="https://www.notion.so/" target="_blank">Notion (Group Notes)</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+  <script src="groupChat.js"></script>
+  <script>
+    // Hamburger menu open/close effect and shifting
+    document.addEventListener("DOMContentLoaded", function () {
+      const menuBtn = document.querySelector('.menu-btn');
+      const menuCheckbox = document.getElementById('btn');
+      const mainContent = document.querySelector('.main-content');
+      function updateShift() {
+        if (menuCheckbox.checked) {
+          mainContent.style.marginLeft = getComputedStyle(document.documentElement).getPropertyValue('--sidebar-width');
+        } else {
+          mainContent.style.marginLeft = "0";
+        }
+      }
+      menuBtn.addEventListener('click', updateShift);
+      menuCheckbox.addEventListener('change', updateShift);
+      // Load group details into details section
+      const urlParams = new URLSearchParams(window.location.search);
+      const groupId = urlParams.get("id");
+      if (!groupId) return;
+      fetch(`https://d8198667-ff75-455a-b79b-07dd0d479be4-00-r4gn5klvlyu4.pike.replit.dev/get-group.php?id=${groupId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.group) {
+            document.getElementById("sidebarGroupTitle").textContent = data.group.title || "";
+            document.getElementById("sidebarGroupSubject").textContent = data.group.subject ? "Subject: " + data.group.subject : "";
+            document.getElementById("sidebarGroupLocation").textContent = data.group.location || "-";
+            document.getElementById("sidebarGroupDay").textContent = data.group.meeting_day || "-";
+            document.getElementById("sidebarGroupTime").textContent = data.group.meeting_time || "-";
+            document.getElementById("sidebarGroupCapacity").textContent = data.group.capacity ? `Capacity: ${data.group.capacity}` : "-";
+            document.getElementById("sidebarGroupDesc").textContent = data.group.description || "";
+            document.getElementById("sidebarGroupExtra").textContent = data.group.created_by ? `Created by: ${data.group.created_by}` : "";
+          }
+        });
+    });
+  </script>
+</body>
+</html>
