@@ -183,6 +183,48 @@
       font-size: 1rem;
     }
   }
+  .search-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto 1.5rem auto;
+}
+
+#searchInput {
+  width: 100%;
+  padding-right: 2.5rem;
+  border-radius: 12px; /* rectangle with slightly rounded corners */
+  border: 1px solid #ccc;
+  height: 48px;
+  font-size: 1rem;
+  box-shadow: 0 2px 8px rgba(120,134,199,0.07);
+  transition: border-color 0.2s;
+}
+#searchInput:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+#clearSearch {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.1rem; /* smaller size */
+  color: #666;       /* more neutral color */
+  cursor: pointer;
+  display: none;
+  z-index: 10;
+  background: transparent;
+  border: none;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.2s;
+}
+#clearSearch:hover {
+  color: #222; /* slightly darker on hover */
+}
+
 </style>
 
 </head>
@@ -211,35 +253,21 @@
       <a href="addGroup.html" class="btn btn-primary"> Create New Group</a>
     </div>
 
-    <div class="input-group mb-4">
-      <input type="text" class="form-control" placeholder="Search for study groups..." />
-      <button class="btn btn-outline-secondary">Search</button>
-    </div>
+ <div class="search-wrapper d-flex justify-content-center mb-4" style="position:relative;max-width:100%;margin:auto;">
+  <input type="text" id="searchInput" class="form-control" placeholder="Search for study groups..." style="padding-right:2.5rem;">
+  <span id="clearSearch" style="position:absolute;right:15px;top:50%;transform:translateY(-50%);cursor:pointer;display:none;">❌</span>
+</div>
 
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-      <div class="col">
-        <div class="group-card">
-          <div class="group-title">🧮 Calculus Study Group</div>
-          <div class="group-info"><strong>Location:</strong> Room A102</div>
-          <div class="group-info"><strong>Time:</strong> Sundays @ 3:00 PM</div>
-          <div class="group-info"><strong>Spots:</strong> 3 / 6 filled</div>
-          <button class="btn btn-join mt-3">Join Group</button>
-        </div>
-      </div>
 
-      <div class="col">
-        <div class="group-card">
-          <div class="group-title">💻 Programming I</div>
-          <div class="group-info"><strong>Location:</strong> CS Lab 1</div>
-          <div class="group-info"><strong>Time:</strong> Thursdays @ 2:30 PM</div>
-          <div class="group-info"><strong>Spots:</strong> 7 / 10 filled</div>
-          <button class="btn btn-join mt-3">Join Group</button>
-        </div>
-      </div>
+
+   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="groupContainer">
+  <!-- Dynamic group cards will be inserted here -->
+   </div>
 
     
     </div>
   </div>
+  <script src="studyGroup.js"></script>
 </body>
 </html>
 
