@@ -1,90 +1,85 @@
-// scripts.js - Improved Version for Add/Edit Event Form
-
-// ===== Helper Functions =====
-function getStoredEvents() {
-    return JSON.parse(localStorage.getItem("events")) || [];
-}
-
-function setStoredEvents(events) {
-    localStorage.setItem("events", JSON.stringify(events));
-}
-
-function validateEventData(data) {
-    return data.eventTitle && data.eventDate && data.eventTime && data.eventLocation && data.eventDescription;
-}
-
-function buildEventObject(data) {
-    return {
-        title: data.eventTitle,
-        date: data.eventDate,
-        time: data.eventTime,
-        location: data.eventLocation,
-        description: data.eventDescription,
-        category: data.eventCategory || "Other"
-    };
-}
-
-function prefillForm(form, event) {
-    form.eventTitle.value = event.title;
-    form.eventDate.value = event.date;
-    form.eventTime.value = event.time;
-    form.eventLocation.value = event.location;
-    form.eventDescription.value = event.description;
-    if (form.eventCategory) form.eventCategory.value = event.category;
-}
-
-function redirectToCalendar() {
-    window.location.href = "eventsCalender.html";
-}
-
-// ===== Main Handler =====
 document.addEventListener("DOMContentLoaded", function () {
-    // Ensure form pre-fills correctly when editEvent data is present
-    const editEvent = JSON.parse(localStorage.getItem("editEvent"));
-    if (editEvent) {
-        document.getElementById("eventTitle").value = editEvent.title;
-        document.getElementById("eventDate").value = editEvent.date;
-        document.getElementById("eventTime").value = editEvent.time || "";
-        document.getElementById("eventLocation").value = editEvent.location;
-        document.getElementById("eventCategory").value = editEvent.category || "";
-        document.getElementById("eventDescription").value = editEvent.description || "";
+  const form = document.getElementById("eventForm");
+
+  const editEvent = JSON.parse(localStorage.getItem("editEvent"));
+  const isEditing = editEvent !== null;
+
+  if (isEditing) {
+    form.eventTitle.value = editEvent.title;
+    form.eventDate.value = editEvent.date;
+    form.eventTime.value = editEvent.time || "";
+    form.eventLocation.value = editEvent.location;
+    form.eventCategory.value = editEvent.category || "";
+    form.eventDescription.value = editEvent.description || "";
+  }
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    if (!data.eventTitle || !data.eventDate || !data.eventTime || !data.eventLocation || !data.eventDescription) {
+      alert("Please fill in all fields before submitting the form.");
+      return;
     }
 
-    const form = document.getElementById("eventForm");
+    const eventData = {
+      title: data.eventTitle,
+      date: data.eventDate,
+      time: data.eventTime,
+      location: data.eventLocation,
+      description: data.eventDescription,
+      category: data.eventCategory || "Other"
+    };
 
-    const editIndex = localStorage.getItem("editIndex");
-    const events = getStoredEvents();
+    if (isEditing && editEvent) {
+      fetch("https://d8198667-ff75-455a-b79b-07dd0d479be4-00-r4gn5klvlyu4.pike.replit.dev/update-event.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+        id: editEvent.id, // send the event ID instead
+        ...eventData
+  })
 
-    // Prefill if editing
-    if (editIndex !== null && events[editIndex]) {
-        prefillForm(form, events[editIndex]);
-    }
-
-    // Handle form submission
-    form.addEventListener("submit", function (event) {
-        event.preventDefault();
-
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
-
-        if (!validateEventData(data)) {
-            alert("Please fill in all fields before submitting the form.");
-            return;
-        }
-
-        const eventData = buildEventObject(data);
-
-        if (editIndex !== null && events[editIndex]) {
-            events[editIndex] = eventData;
-            localStorage.removeItem("editIndex");
-            alert("Event updated successfully!");
+      .then(res => res.json())
+      .then(response => {
+        if (response.success) {
+          alert("✅ Event updated successfully!");
+          localStorage.removeItem("editEvent");
+          window.location.href = "eventsCalender.html";
         } else {
-            events.push(eventData);
-            alert("Event added successfully!");
+          alert("❌ Failed to update event: " + response.error);
         }
+      })
+      .catch(error => {
+        console.error("❌ Network error:", error);
+        alert("Network error while updating the event.");
+      });
 
-        setStoredEvents(events);
-        form.reset();
-        redirectToCalendar();
-    });
+    } else {
+      fetch("https://d8198667-ff75-455a-b79b-07dd0d479be4-00-r4gn5klvlyu4.pike.replit.dev/add-events.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(eventData)
+      })
+      .then(res => res.json())
+      .then(response => {
+        if (response.success) {
+          alert("✅ Event added successfully!");
+          window.location.href = "eventsCalender.html";
+        } else {
+          alert("❌ Failed to add event: " + response.error);
+        }
+      })
+      .catch(error => {
+        console.error("❌ Network error:", error);
+        alert("Network error while adding the event.");
+      });
+    }
+  });
 });
