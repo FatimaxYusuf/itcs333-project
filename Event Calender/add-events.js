@@ -40,10 +40,10 @@ document.addEventListener("DOMContentLoaded", function () {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-        id: editEvent.id, // send the event ID instead
-        ...eventData
-  })
-
+          id: editEvent.id, // send the event ID instead
+          ...eventData
+        })
+      })
       .then(res => res.json())
       .then(response => {
         if (response.success) {

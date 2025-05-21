@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Course Notes</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="nav-style9.css"> <!-- If you moved the nav CSS there -->
 
   <style>
     :root {
@@ -17,19 +18,34 @@
       --nav-hover: #A9B5DF;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Inter', sans-serif;
-    }
-
     body {
       background-color: var(--bg-light);
       color: var(--text-dark);
-      min-height: 100vh;
+      padding: 2rem 2rem 2rem 270px; /* space for sidebar */
+      font-family: 'Inter', sans-serif;
     }
 
+    .note-card {
+      background: white;
+      border-left: 4px solid var(--primary);
+      margin: 1rem 0;
+      padding: 1rem;
+      border-radius: 10px;
+    }
+
+    #subjectList .subject-card {
+      background: white;
+      border-left: 5px solid var(--accent);
+      padding: 1rem;
+      margin-bottom: 10px;
+      border-radius: 8px;
+    }
+
+    #notesSection {
+      margin-top: 30px;
+    }
+
+    /* Sidebar Styles (from your provided nav) */
     .menue {
       position: fixed;
       height: 100vh;
@@ -119,10 +135,13 @@
   </style>
 </head>
 <body>
+  <!-- Sidebar toggle -->
   <input type="checkbox" id="btn">
   <label for="btn" class="menu-btn">
     <i class="fas fa-bars"></i>
   </label>
+
+  <!-- Sidebar navigation -->
   <div class="menue">
     <nav id="sidebar">
       <div class="title">Campus Hub</div>
@@ -136,53 +155,97 @@
     </nav>
   </div>
 
-  <main class="container mt-5" style="margin-left:270px">
-    <h1 class="mb-4">Course Notes</h1>
+  <!-- Course Notes Content -->
+  <h1>📚 Course Notes Catalog</h1>
+  <div id="errorMsg" class="alert alert-danger d-none"></div>
 
-    <div class="row mb-3">
-      <div class="col-md-6">
-        <input type="text" class="form-control" placeholder="Search notes...">
-      </div>
-      <div class="col-md-3">
-        <select class="form-select">
-          <option selected disabled>Filter by Course</option>
-          <option>CS101</option>
-          <option>MATH203</option>
-        </select>
-      </div>
-      <div class="col-md-3">
-        <select class="form-select">
-          <option selected disabled>Sort by</option>
-          <option>Date</option>
-          <option>Title</option>
-        </select>
-      </div>
-    </div>
+  <div class="d-flex justify-content-end align-items-center mb-3" style="margin-top:-10px;">
+    <button class="add-subject-btn" data-bs-toggle="modal" data-bs-target="#addSubjectModal">
+      <i class="fa-solid fa-folder-plus"></i> Add Subject
+    </button>
+  </div>
 
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-      <div class="col">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">Data Structures Notes</h5>
-            <p class="card-text">Summary of linked lists, stacks, and queues.</p>
-            <a href="note-details.html" class="btn btn-outline-primary btn-sm">View Details</a>
-          </div>
+  <!-- Add Subject Modal -->
+  <div class="modal fade" id="addSubjectModal" tabindex="-1" aria-labelledby="addSubjectModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addSubjectModalLabel">Add New Subject</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="addSubjectForm">
+            <input type="text" name="subject_code" class="form-control my-2" placeholder="Subject Code (e.g. ITCS333)" required>
+            <input type="text" name="subject_name" class="form-control my-2" placeholder="Subject Name" required>
+            <button type="submit" class="btn btn-primary">Add Subject</button>
+          </form>
+          <div id="addSubjectStatus" class="mt-2"></div>
         </div>
       </div>
     </div>
+  </div>
 
-    <nav class="mt-4">
-      <ul class="pagination justify-content-center">
-        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-      </ul>
-    </nav>
+  <section id="subjectList" class="mt-4">
+    <!-- Subjects loaded here -->
+  </section>
 
-    <div class="text-end mt-3">
-      <a href="add-note9.html" class="btn btn-primary">+ Add New Note</a>
-    </div>
-  </main>
+  <section id="notesSection" style="display:none;">
+    <h2 id="subjectTitle"></h2>
+    <button class="btn btn-secondary mb-3" onclick="backToSubjects()">⬅ Back</button>
+
+    <div id="notesList"></div>
+
+    <h3>➕ Upload a New Note</h3>
+    <form id="uploadForm" enctype="multipart/form-data">
+      <input type="text" name="note_title" class="form-control my-2" placeholder="Note Title" required>
+      <textarea name="description" class="form-control my-2" placeholder="Optional Description"></textarea>
+      <input type="file" name="file" class="form-control my-2" required>
+      <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+    <div id="uploadStatus" class="mt-2"></div>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="notes-catalog.js"></script>
+  <script>
+    // Helper to show error messages
+    function showError(msg) {
+      const err = document.getElementById('errorMsg');
+      err.textContent = msg;
+      err.classList.remove('d-none');
+    }
+
+    // Debug: Intercept upload form and log data
+    document.addEventListener('DOMContentLoaded', function() {
+      const uploadForm = document.getElementById('uploadForm');
+      if (uploadForm) {
+        uploadForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const formData = new FormData(uploadForm);
+          // Debug: Log form data keys
+          for (let [key, value] of formData.entries()) {
+            console.log(key, value);
+          }
+          // Example fetch (adjust URL and logic as needed)
+          fetch('https://d8198667-ff75-455a-b79b-07dd0d479be4-00-r4gn5klvlyu4.pike.replit.dev/add-note.php', {
+            method: 'POST',
+            body: formData
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              document.getElementById('uploadStatus').textContent = 'Upload successful!';
+              document.getElementById('uploadStatus').className = 'alert alert-success mt-2';
+            } else {
+              showError(data.error || 'Upload failed.');
+            }
+          })
+          .catch(err => {
+            showError('Network or server error: ' + err);
+          });
+        });
+      }
+    });
+  </script>
 </body>
 </html>

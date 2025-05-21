@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subject Notes</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="../Course Notes/nav-style9.css">
+  <style>
+    :root {
+      --bg-light: #FFF2F2;
+      --primary: #A9B5DF;
+      --accent: #7886C7;
+      --text-dark: #2D336B;
+      --white: #fff;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+    }
+    .menu {
+      position: fixed;
+      height: 100vh;
+      width: 250px;
+      z-index: 1000;
+      left: -250px;
+      transition: all 0.3s ease;
+      background-color: var(--accent);
+    }
+    #btn:checked ~ .menu {
+      left: 0;
+    }
+    input[type="checkbox"] {
+      display: none;
+    }
+    .menu-btn {
+      position: fixed;
+      top: 10px;
+      left: 20px;
+      height: 45px;
+      width: 45px;
+      z-index: 999;
+      color: white;
+      background: var(--accent);
+      border: none;
+      text-align: center;
+      line-height: 45px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 23px;
+      transition: all 0.3s ease;
+    }
+    #btn:checked ~ .menu-btn {
+      left: 270px;
+    }
+    #btn:checked ~ .menu-btn i:before {
+      content: "\f00d";
+    }
+    #sidebar {
+      height: 100%;
+      width: 100%;
+    }
+    #sidebar .title {
+      color: white;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 65px;
+      text-align: center;
+      background-color: var(--accent);
+    }
+    #sidebar .list {
+      list-style: none;
+      padding: 0;
+    }
+    #sidebar .list li {
+      line-height: 50px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-left: 30px;
+      transition: all 0.3s ease;
+    }
+    #sidebar .list li:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      box-shadow: inset 4px 0 0 var(--primary);
+    }
+    #sidebar .list li a {
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+      display: block;
+    }
+    #sidebar .list li a i {
+      margin-right: 15px;
+    }
+    .container {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 16px rgba(120,134,199,0.08);
+      padding: 2rem 2.5rem 2.5rem 2.5rem;
+      max-width: 700px;
+      margin: 3rem auto 2rem auto;
+    }
+    #subjectTitle {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: #7886C7;
+    }
+    .note-card {
+      background: #F8F9FF;
+      border-left: 5px solid #A9B5DF;
+      margin: 1rem 0;
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 1px 6px rgba(120,134,199,0.06);
+      transition: box-shadow 0.2s;
+    }
+    .note-card:hover {
+      box-shadow: 0 4px 16px rgba(120,134,199,0.13);
+    }
+    form#uploadForm {
+      background: #F8F9FF;
+      border-radius: 10px;
+      padding: 1.5rem 1rem 1rem 1rem;
+      box-shadow: 0 1px 6px rgba(120,134,199,0.06);
+      margin-top: 1.5rem;
+    }
+    .add-subject-btn {
+      background: linear-gradient(90deg, #7886C7 60%, #A9B5DF 100%);
+      color: #fff;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      padding: 0.7rem 1.5rem;
+      font-size: 1.1rem;
+      box-shadow: 0 2px 8px rgba(120,134,199,0.10);
+      transition: background 0.2s, box-shadow 0.2s;
+      margin-bottom: 1.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .add-subject-btn:hover, .add-subject-btn:focus {
+      background: linear-gradient(90deg, #A9B5DF 60%, #7886C7 100%);
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(120,134,199,0.18);
+    }
+    @media (max-width: 900px) {
+      .container {
+        max-width: 95vw;
+        padding: 1.5rem 1rem;
+      }
+    }
+    @media (max-width: 600px) {
+      .container {
+        margin: 1rem 0;
+        padding: 1rem 0.5rem;
+        border-radius: 8px;
+      }
+      #subjectTitle {
+        font-size: 1.3rem;
+      }
+      .note-card {
+        padding: 0.7rem 0.7rem;
+        font-size: 0.97rem;
+      }
+      form#uploadForm {
+        padding: 1rem 0.3rem 0.7rem 0.3rem;
+      }
+      button, input, textarea {
+        font-size: 1rem !important;
+      }
+      .add-subject-btn {
+        font-size: 1rem;
+        padding: 0.6rem 1rem;
+      }
+    }
+    @media (max-width: 400px) {
+      .container {
+        padding: 0.5rem 0.1rem;
+      }
+      .note-card {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <input type="checkbox" id="btn">
+  <label for="btn" class="menu-btn">
+    <i class="fas fa-bars"></i>
+  </label>
+  
+    <div class="menu">
+    <nav id="sidebar">
+      <div class="title">Campus Hub</div>
+      <ul class="list">
+        <li><a href="../Event Calender/eventsCalender.html"><i class="fa-solid fa-calendar-days"></i> Events Calendar</a></li>
+        <li><a href="../Study Group Finder/studyGroup.html"><i class="fa-solid fa-user-group"></i> Study Group Finder</a></li>
+        <li><a href="../Course Review/course-rev.html"><i class="fa-solid fa-file-pen"></i> Course Reviews</a></li>
+        <li><a href="../Course Notes/course-notes9.html"><i class="fa-solid fa-book"></i> Course Notes</a></li>
+        <li><a href="../CampusNews/campusnewsmain.html"><i class="fa-solid fa-newspaper"></i> Campus News</a></li>
+      </ul>
+    </nav>
+  </div>
+  </div>
+  <main class="container mt-5">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <button class="btn btn-secondary" onclick="window.location.href='course-notes9.html'">⬅ Back to Subjects</button>
+      <button class="btn btn-primary add-note-btn" id="showAddNoteForm"><i class="fa fa-plus"></i> Add Note</button>
+    </div>
+    <h1 id="subjectTitle" class="mb-4">Subject Notes</h1>
+    <div class="mb-4">
+      <input type="text" id="searchNotesInput" class="form-control" placeholder="Search notes by title or description...">
+    </div>
+    <div id="notesList"></div>
+    <div id="addNoteSection" style="display:none;">
+      <div class="card shadow-lg p-4 mt-4 mb-4 border-0" style="background: linear-gradient(90deg, #f8f9ff 60%, #e9eefd 100%); border-radius: 18px;">
+        <h3 class="mb-3 text-primary"><i class="fa fa-upload"></i> Upload a New Note</h3>
+        <form id="uploadForm" enctype="multipart/form-data">
+          <input type="text" name="note_title" class="form-control my-2" placeholder="Note Title" required>
+          <textarea name="description" class="form-control my-2" placeholder="Optional Description"></textarea>
+          <input type="file" name="file" class="form-control my-2" required>
+          <div class="d-flex justify-content-end gap-2 mt-2">
+            <button type="button" class="btn btn-outline-secondary" id="cancelAddNote">Cancel</button>
+            <button type="submit" class="btn btn-success">Upload</button>
+          </div>
+        </form>
+        <div id="uploadStatus" class="mt-2"></div>
+      </div>
+    </div>
+  </main>
+  <script src="subject-notes.js"></script>
+  <script>
+    // Toggle add note form
+    document.addEventListener('DOMContentLoaded', function() {
+      const showBtn = document.getElementById('showAddNoteForm');
+      const addSection = document.getElementById('addNoteSection');
+      const cancelBtn = document.getElementById('cancelAddNote');
+      if (showBtn && addSection) {
+        showBtn.onclick = () => { addSection.style.display = ''; showBtn.style.display = 'none'; };
+      }
+      if (cancelBtn && addSection && showBtn) {
+        cancelBtn.onclick = () => { addSection.style.display = 'none'; showBtn.style.display = ''; };
+      }
+    });
+  </script>
+</body>
+</html>
